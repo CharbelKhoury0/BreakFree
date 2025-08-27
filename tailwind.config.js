@@ -9,6 +9,13 @@ export default {
       fontWeight: {
         'extra-bold': '800',
         'black': '900',
+      },
+      screens: {
+        'xs': '475px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
       }
     },
   },

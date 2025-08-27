@@ -37,5 +37,37 @@
     * {
       -webkit-overflow-scrolling: touch;
     }
+
+    /* Prevent content from being cut off */
+    section {
+      min-height: auto !important;
+    }
+
+    /* Better spacing for mobile */
+    .py-20 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    /* Ensure proper viewport height handling */
+    .min-h-screen {
+      min-height: 100vh;
+      min-height: 100dvh; /* Dynamic viewport height for mobile */
+    }
+  }
+
+  /* Additional mobile fixes */
+  @media (max-width: 480px) {
+    /* Even smaller screens */
+    .py-20 {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+    
+    /* Ensure text doesn't overflow */
+    h1 {
+      word-wrap: break-word;
+      hyphens: auto;
+    }
   }
 }
