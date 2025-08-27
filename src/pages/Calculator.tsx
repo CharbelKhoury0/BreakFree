@@ -92,7 +92,7 @@ const Calculator = () => {
         level: 'Low Risk',
         color: 'text-green-400',
         bgColor: 'bg-green-500/10',
-        borderColor: 'border-green-400/30',
+       borderColor: 'border-green-500',
         description: 'Your responses suggest minimal risk. Consider our educational resources to maintain healthy habits.',
         recommendations: [
           'Continue maintaining healthy boundaries',
@@ -106,7 +106,7 @@ const Calculator = () => {
         level: 'Moderate Risk',
         color: 'text-yellow-400',
         bgColor: 'bg-yellow-500/10',
-        borderColor: 'border-yellow-400/30',
+       borderColor: 'border-yellow-500',
         description: 'Your responses indicate some concerning patterns. Early intervention could be very helpful.',
         recommendations: [
           'Consider professional guidance',
@@ -120,7 +120,7 @@ const Calculator = () => {
         level: 'High Risk',
         color: 'text-red-400',
         bgColor: 'bg-red-500/10',
-        borderColor: 'border-red-400/30',
+       borderColor: 'border-red-500',
         description: 'Your responses suggest significant challenges that would benefit from professional support.',
         recommendations: [
           'Seek professional counseling',
@@ -134,7 +134,7 @@ const Calculator = () => {
         level: 'Severe Risk',
         color: 'text-red-500',
         bgColor: 'bg-red-600/10',
-        borderColor: 'border-red-500/30',
+       borderColor: 'border-red-600',
         description: 'Your responses indicate serious concerns that require immediate professional attention.',
         recommendations: [
           'Seek immediate professional help',
@@ -165,6 +165,7 @@ const Calculator = () => {
           className="text-center mb-12"
         >
           <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-6">
             <CalcIcon className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -186,6 +187,7 @@ const Calculator = () => {
               <div className="w-full bg-slate-700 rounded-full h-2">
                 <motion.div
                   className="bg-gradient-to-r from-amber-400 to-red-500 h-2 rounded-full"
+                  className="bg-gradient-to-r from-amber-600 to-red-700 h-2 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.5 }}
@@ -210,6 +212,7 @@ const Calculator = () => {
                     key={index}
                     onClick={() => handleAnswer(option.value)}
                     className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-amber-400/50 rounded-xl p-4 text-left transition-all duration-300 group"
+                    className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-amber-500 rounded-xl p-4 text-left transition-all duration-300 group"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -289,7 +292,7 @@ const Calculator = () => {
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Link
                 to="/programs/mentorship"
-                className="bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+               className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 Get Started Today
               </Link>

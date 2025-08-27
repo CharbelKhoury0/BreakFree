@@ -76,6 +76,7 @@ const Community = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button className="bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105">
+                <button className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105">
                   Join Community Now
                 </button>
                 <Link
@@ -138,8 +139,10 @@ const Community = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="bg-slate-900 rounded-2xl p-8 border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
+                className="bg-slate-900 rounded-2xl p-8 border border-slate-700 hover:border-amber-500 transition-all duration-300"
               >
                 <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-xl flex items-center justify-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-xl flex items-center justify-center mb-6">
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
@@ -294,6 +297,7 @@ const Community = () => {
             </div>
 
             <button className="w-full bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105">
+            <button className="w-full bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105">
               Join the Community
             </button>
             
@@ -305,7 +309,7 @@ const Community = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-amber-500 to-red-500">
+      <section className="py-20 bg-gradient-to-r from-amber-600 to-red-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

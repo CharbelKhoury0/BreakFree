@@ -27,7 +27,7 @@ const Hero = () => {
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
             Break Free from
-            <span className="bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent"> Addiction</span>
+            <span className="bg-gradient-to-r from-amber-600 to-red-700 bg-clip-text text-transparent"> Addiction</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -37,7 +37,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
             <Link
               to="/calculator"
-              className="group bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
+              className="group bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
             >
               <Calculator className="w-5 h-5" />
               <span>Take the Calculator</span>

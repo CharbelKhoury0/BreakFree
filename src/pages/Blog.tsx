@@ -154,6 +154,7 @@ const Blog = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
+              className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-500 transition-all duration-300"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="aspect-video lg:aspect-square">
@@ -164,6 +165,7 @@ const Blog = () => {
                 </div>
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
                   <div className="inline-block bg-gradient-to-r from-amber-400 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
+                  <div className="inline-block bg-gradient-to-r from-amber-600 to-red-700 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
                     Featured
                   </div>
                   <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
@@ -214,6 +216,7 @@ const Blog = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-400/30 transition-all duration-300 group"
+                className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-500 transition-all duration-300 group"
               >
                 <div className="aspect-video overflow-hidden">
                   <div 
@@ -282,7 +285,7 @@ const Blog = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-20 bg-gradient-to-r from-amber-500 to-red-500">
+      <section className="py-20 bg-gradient-to-r from-amber-600 to-red-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

@@ -69,7 +69,7 @@ const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-red-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">BF</span>
+            className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
             </div>
             <span className="text-white font-bold text-xl">BreakFree</span>
           </Link>
@@ -194,7 +194,7 @@ const Navigation = () => {
               ))}
               <Link
                 to="/calculator"
-                className="block w-full bg-gradient-to-r from-amber-500 to-red-500 text-white px-4 py-2 rounded-lg font-semibold text-center"
+                className="block w-full bg-gradient-to-r from-amber-600 to-red-700 text-white px-4 py-2 rounded-lg font-semibold text-center"
               >
                 Take the Calculator
               </Link>
