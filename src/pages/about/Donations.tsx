@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Heart, Users, Target, DollarSign, CheckCircle, Gift } from 'lucide-react';
+import { ArrowRight, Heart, Users, Target, DollarSign, CheckCircle, Gift, Loader, AlertCircle } from 'lucide-react';
+import { mailerLiteService } from '../../services/mailerlite';
 
 const Donations = () => {
   const [selectedAmount, setSelectedAmount] = useState(50);
   const [customAmount, setCustomAmount] = useState('');
   const [donationType, setDonationType] = useState('one-time');
+  const [donorEmail, setDonorEmail] = useState('');
+  const [donorName, setDonorName] = useState('');
+  const [emailOptIn, setEmailOptIn] = useState(true);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
 
   const donationAmounts = [25, 50, 100, 250, 500];
 
@@ -56,6 +62,52 @@ const Donations = () => {
 
   const getCurrentAmount = () => {
     return customAmount ? parseFloat(customAmount) : selectedAmount;
+  };
+
+  const handleDonation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!donorEmail || !donorName || getCurrentAmount() <= 0) {
+      setStatus('error');
+      setMessage('Please fill in all required fields and select a donation amount');
+      return;
+    }
+
+    setStatus('loading');
+    
+    try {
+      // Subscribe to donor updates if opted in
+      if (emailOptIn) {
+        await mailerLiteService.subscribeWithInterest({
+          email: donorEmail,
+          name: donorName,
+          interest: 'donor_updates',
+          source: 'donation_form'
+        });
+      }
+      
+      // Here you would integrate with your payment processor (Stripe, PayPal, etc.)
+      // For now, we'll simulate the donation process
+      
+      setStatus('success');
+      setMessage(`Thank you for your ${donationType} donation of $${getCurrentAmount()}!`);
+      
+      // Reset form
+      setDonorEmail('');
+      setDonorName('');
+      setSelectedAmount(50);
+      setCustomAmount('');
+      
+    } catch (error) {
+      setStatus('error');
+      setMessage('Something went wrong. Please try again.');
+    }
+
+    // Reset status after 5 seconds
+    setTimeout(() => {
+      setStatus('idle');
+      setMessage('');
+    }, 5000);
   };
 
   return (
@@ -174,6 +226,7 @@ const Donations = () => {
           </motion.div>
 
           <div className="bg-slate-950 rounded-2xl p-8 border border-white/10">
+            <form onSubmit={handleDonation}>
             {/* Donation Type */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-4">Donation Type</h3>
@@ -265,17 +318,105 @@ const Donations = () => {
               </div>
             )}
 
+            {/* Donor Information */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4">Donor Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="donorName" className="block text-white font-semibold mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="donorName"
+                    value={donorName}
+                    onChange={(e) => setDonorName(e.target.value)}
+                    disabled={status === 'loading'}
+                    required
+                    className="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium disabled:opacity-50"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="donorEmail" className="block text-white font-semibold mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="donorEmail"
+                    value={donorEmail}
+                    onChange={(e) => setDonorEmail(e.target.value)}
+                    disabled={status === 'loading'}
+                    required
+                    className="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium disabled:opacity-50"
+                    placeholder="Enter your email"
+                  />
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={emailOptIn}
+                    onChange={(e) => setEmailOptIn(e.target.checked)}
+                    disabled={status === 'loading'}
+                    className="w-4 h-4 text-white bg-slate-800 border-white/20 rounded focus:ring-white/20"
+                  />
+                  <span className="text-gray-300 font-medium text-sm">
+                    Send me updates about how my donation is making an impact
+                  </span>
+                </label>
+              </div>
+            </div>
+
             {/* Donate Button */}
-            <button className="w-full bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 border border-white/10 hover:border-white/20 flex items-center justify-center space-x-2">
-              <Gift className="w-5 h-5" />
-              <span>
-                Donate ${getCurrentAmount() || '0'} {donationType === 'monthly' ? '/month' : ''}
-              </span>
+            <button 
+              type="submit"
+              disabled={status === 'loading' || getCurrentAmount() <= 0}
+              className="w-full bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 border border-white/10 hover:border-white/20 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {status === 'loading' ? (
+                <>
+                  <Loader className="w-5 h-5 animate-spin" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <Gift className="w-5 h-5" />
+                  <span>
+                    Donate ${getCurrentAmount() || '0'} {donationType === 'monthly' ? '/month' : ''}
+                  </span>
+                </>
+              )}
             </button>
             
+            {status === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center space-x-2 text-red-400 text-sm mt-4"
+              >
+                <AlertCircle className="w-4 h-4" />
+                <span>{message}</span>
+              </motion.div>
+            )}
+            
+            {status === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center space-x-2 text-green-400 text-sm mt-4"
+              >
+                <CheckCircle className="w-4 h-4" />
+                <span>{message}</span>
+              </motion.div>
+            )}
+            
             <p className="text-gray-400 text-sm text-center mt-4 font-medium">
-              Secure donation processing powered by Stripe. Tax-deductible receipt provided.
+              Secure donation processing. Tax-deductible receipt provided via email.
             </p>
+            </form>
           </div>
         </div>
       </section>

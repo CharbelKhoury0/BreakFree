@@ -33,3 +33,13 @@ export interface CalculatorResult {
   recommendations: string[];
   programs: string[];
 }
+
+export interface EmailSubscription {
+  email: string;
+  name?: string;
+  source: string;
+  interests?: string[];
+  customFields?: {
+    [key: string]: string | number;
+  };
+}
