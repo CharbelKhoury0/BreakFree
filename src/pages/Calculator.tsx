@@ -314,7 +314,7 @@ const Calculator = () => {
             This assessment is for informational purposes only and does not constitute medical or professional advice. 
             If you're experiencing severe addiction symptoms or mental health concerns, please seek immediate professional help.
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
