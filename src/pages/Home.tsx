@@ -78,24 +78,24 @@ const Home = () => {
       </section>
 
       {/* Services Preview */}
-      <section className="py-20 bg-slate-950">
+      <section className="py-12 sm:py-16 lg:py-20 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6 tracking-tight">
               Programs built to perform
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+            <p className="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto font-medium">
               Choose the structure that fits your pace. Every path is clear, focused, and accountable.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {programs.map((program, index) => {
               const IconComponent = getIcon(program.icon);
               return (
@@ -105,7 +105,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-slate-900 rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-colors"
+                  className="bg-slate-900 rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-white/20 transition-colors"
                 >
                   <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-6">
                     <IconComponent className="w-7 h-7 text-white" />
@@ -143,7 +143,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-slate-900">
+      <section className="py-12 sm:py-16 lg:py-20 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -152,10 +152,10 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6 tracking-tight">
               Success stories
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+            <p className="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto font-medium">
               Men who chose discipline—and changed their lives.
             </p>
           </motion.div>
@@ -165,7 +165,7 @@ const Home = () => {
       </section>
 
       {/* Authority Section */}
-      <section className="py-20 bg-slate-950">
+      <section className="py-12 sm:py-16 lg:py-20 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -174,15 +174,15 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6 tracking-tight">
               Proven. Confidential. Built for men.
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+            <p className="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto font-medium">
               Evidence-based methods, professional guidance, and a culture of accountability.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -243,7 +243,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-slate-900">
+      <section className="py-12 sm:py-16 lg:py-20 bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -251,15 +251,15 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6 tracking-tight">
               Ready to get to work?
             </h2>
-            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
+            <p className="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
               Start with a quick assessment. Get a plan. Execute.
             </p>
             <Link
               to="/calculator"
-              className="inline-flex items-center space-x-2 border border-white/15 hover:border-white/30 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300"
+              className="inline-flex items-center space-x-2 border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 min-h-[48px]"
             >
               <span>Start assessment</span>
               <ArrowRight className="w-5 h-5" />

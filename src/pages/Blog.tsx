@@ -94,10 +94,10 @@ const Blog = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight">
               Insights
             </h1>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+            <p className="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto font-medium">
               Clear guidance, practical tools, and field-tested lessons for recovery.
             </p>
           </motion.div>
@@ -165,10 +165,10 @@ const Blog = () => {
                   <div className="inline-block text-white/80 px-3 py-1 rounded-full text-xs font-semibold mb-4 border border-white/15 w-fit">
                     Featured
                   </div>
-                  <h2 className="text-3xl lg:text-4xl font-black text-white mb-4 leading-tight tracking-tight">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black text-white mb-4 leading-tight tracking-tight">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-gray-300 text-lg mb-6 leading-relaxed font-medium">
+                  <p className="text-gray-300 text-sm sm:text-base lg:text-lg mb-6 leading-relaxed font-medium">
                     {featuredPost.excerpt}
                   </p>
                   <div className="flex items-center justify-between mb-6">
@@ -231,11 +231,11 @@ const Blog = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-black text-white mb-3 leading-tight tracking-tight">
+                  <h3 className="text-lg sm:text-xl font-black text-white mb-3 leading-tight tracking-tight">
                     {post.title}
                   </h3>
                   
-                  <p className="text-gray-300 text-sm mb-4 leading-relaxed font-medium">
+                  <p className="text-gray-300 text-xs sm:text-sm mb-4 leading-relaxed font-medium">
                     {post.excerpt}
                   </p>
                   
@@ -289,10 +289,10 @@ const Blog = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight">
               Stay sharp
             </h2>
-            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
+            <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
               Get concise insights delivered to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">

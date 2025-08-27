@@ -127,7 +127,7 @@ const Navigation = () => {
           <div className="hidden md:block">
             <Link
               to="/calculator"
-              className="border border-white/15 hover:border-white/30 text-white px-6 py-2 rounded-lg font-bold transition-all duration-300"
+              className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 min-h-[44px] flex items-center"
             >
               Assessment
             </Link>
@@ -136,7 +136,7 @@ const Navigation = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white"
+            className="md:hidden text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -194,7 +194,7 @@ const Navigation = () => {
               ))}
               <Link
                 to="/calculator"
-                className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-2 rounded-lg font-bold text-center"
+                className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-3 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
               >
                 Assessment
               </Link>

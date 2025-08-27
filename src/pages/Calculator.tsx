@@ -12,16 +12,16 @@ const Calculator = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
               Addiction Calculator
             </h1>
-            <p className="text-gray-300 text-lg font-medium">
+            <p className="text-gray-300 text-base sm:text-lg font-medium">
               Assess your risk level and get tailored recommendations.
             </p>
           </motion.div>
 
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 text-gray-300">
-            <p className="font-medium">
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 text-gray-300">
+            <p className="font-medium text-sm sm:text-base">
               This tool is coming soon. In the meantime, explore our programs to begin your recovery journey.
             </p>
           </div>

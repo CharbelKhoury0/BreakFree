@@ -6,7 +6,18 @@ import Home from './pages/Home';
 import Calculator from './pages/Calculator';
 import Mentorship from './pages/programs/Mentorship';
 import Community from './pages/programs/Community';
+import RecoverySessions from './pages/programs/RecoverySessions';
+import Ebooks from './pages/programs/Ebooks';
+import Tools from './pages/programs/Tools';
 import Blog from './pages/Blog';
+import FreeEbook from './pages/FreeEbook';
+import MyStory from './pages/about/MyStory';
+import Testimonials from './pages/about/Testimonials';
+import Certifications from './pages/about/Certifications';
+import Donations from './pages/about/Donations';
+import Privacy from './pages/legal/Privacy';
+import Terms from './pages/legal/Terms';
+import Disclaimer from './pages/legal/Disclaimer';
 
 function App() {
   return (
@@ -18,13 +29,18 @@ function App() {
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/programs/mentorship" element={<Mentorship />} />
           <Route path="/programs/community" element={<Community />} />
+          <Route path="/programs/sessions" element={<RecoverySessions />} />
+          <Route path="/programs/ebooks" element={<Ebooks />} />
+          <Route path="/programs/tools" element={<Tools />} />
           <Route path="/blog" element={<Blog />} />
-          {/* Placeholder routes for other pages */}
-          <Route path="/programs/sessions" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Recovery Sessions</div></div>} />
-          <Route path="/programs/ebooks" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Ebooks</div></div>} />
-          <Route path="/programs/tools" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Tools</div></div>} />
-          <Route path="/free-ebook" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Free Guide</div></div>} />
-          <Route path="/about/*" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">About</div></div>} />
+          <Route path="/free-ebook" element={<FreeEbook />} />
+          <Route path="/about/story" element={<MyStory />} />
+          <Route path="/about/testimonials" element={<Testimonials />} />
+          <Route path="/about/certifications" element={<Certifications />} />
+          <Route path="/about/donations" element={<Donations />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
         </Routes>
         <Footer />
       </div>
