@@ -41,16 +41,19 @@ const TestimonialCarousel = () => {
             className="relative z-10"
           >
             <blockquote className="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed">
+            <blockquote className="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed font-medium">
               "{testimonials[currentIndex].quote}"
             </blockquote>
             
             <div className="flex items-center justify-between">
               <div>
                 <cite className="text-amber-400 font-semibold text-lg not-italic">
+                <cite className="text-amber-400 font-bold text-lg not-italic">
                   {testimonials[currentIndex].name}
                 </cite>
                 {testimonials[currentIndex].recovery_time && (
                   <p className="text-gray-400 text-sm mt-1">
+                  <p className="text-gray-400 text-sm mt-1 font-medium">
                     {testimonials[currentIndex].recovery_time}
                   </p>
                 )}

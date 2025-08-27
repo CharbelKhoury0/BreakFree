@@ -94,10 +94,10 @@ const Blog = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
               Recovery <span className="bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent">Blog</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
               Expert insights, success stories, and practical advice for your recovery journey. 
               Learn from professionals and men who have successfully overcome addiction.
             </p>
@@ -164,12 +164,14 @@ const Blog = () => {
                 </div>
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
                   <div className="inline-block bg-gradient-to-r from-amber-600 to-red-700 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
+                  <div className="inline-block bg-gradient-to-r from-amber-600 to-red-700 text-white px-3 py-1 rounded-full text-sm font-bold mb-4 w-fit">
                     Featured
                   </div>
-                  <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+                  </div>
+                  <h2 className="text-3xl lg:text-4xl font-black text-white mb-4 leading-tight tracking-tight">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                  <p className="text-gray-300 text-lg mb-6 leading-relaxed font-medium">
                     {featuredPost.excerpt}
                   </p>
                   <div className="flex items-center justify-between mb-6">
@@ -190,7 +192,7 @@ const Blog = () => {
                   </div>
                   <Link
                     to={`/blog/${featuredPost.id}`}
-                    className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-semibold group"
+                    className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-bold group"
                   >
                     <span>Read Full Article</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -224,7 +226,9 @@ const Blog = () => {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
                     <span className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-medium">
+                    <span className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold">
                       {post.category}
+                    </span>
                     </span>
                     <div className="flex items-center space-x-2 text-gray-500 text-xs">
                       <Clock className="w-3 h-3" />
@@ -232,11 +236,11 @@ const Blog = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-white mb-3 leading-tight group-hover:text-amber-400 transition-colors">
+                  <h3 className="text-xl font-extra-bold text-white mb-3 leading-tight group-hover:text-amber-400 transition-colors tracking-tight">
                     {post.title}
                   </h3>
                   
-                  <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                  <p className="text-gray-300 text-sm mb-4 leading-relaxed font-medium">
                     {post.excerpt}
                   </p>
                   
@@ -253,7 +257,7 @@ const Blog = () => {
                   
                   <Link
                     to={`/blog/${post.id}`}
-                    className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-medium text-sm mt-4 group"
+                    className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-semibold text-sm mt-4 group"
                   >
                     <span>Read More</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -265,14 +269,14 @@ const Blog = () => {
 
           {filteredPosts.length === 0 && (
             <div className="text-center py-16">
-              <h3 className="text-2xl font-bold text-gray-400 mb-4">No articles found</h3>
-              <p className="text-gray-500 mb-8">Try adjusting your search terms or category filters.</p>
+              <h3 className="text-2xl font-extra-bold text-gray-400 mb-4">No articles found</h3>
+              <p className="text-gray-500 mb-8 font-medium">Try adjusting your search terms or category filters.</p>
               <button
                 onClick={() => {
                   setSearchTerm('');
                   setSelectedCategory('All');
                 }}
-                className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-bold transition-colors"
               >
                 Clear Filters
               </button>
@@ -290,10 +294,10 @@ const Blog = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
               Stay Updated
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-medium">
               Get the latest recovery tips, success stories, and expert advice delivered to your inbox weekly.
             </p>
             <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
@@ -302,11 +306,11 @@ const Blog = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-white text-slate-900"
               />
-              <button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap">
+              <button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">
                 Subscribe
               </button>
             </div>
-            <p className="text-white/70 text-sm mt-4">
+            <p className="text-white/70 text-sm mt-4 font-medium">
               No spam, unsubscribe at any time.
             </p>
           </motion.div>

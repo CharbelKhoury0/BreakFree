@@ -168,9 +168,10 @@ const Calculator = () => {
             <CalcIcon className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
             Addiction Assessment
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto font-medium">
             Take this confidential assessment to understand your situation and get personalized recommendations.
           </p>
         </motion.div>
@@ -200,7 +201,7 @@ const Calculator = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+              <h2 className="text-2xl md:text-3xl font-extra-bold text-white mb-8 tracking-tight">
                 {questions[currentQuestion].text}
               </h2>
 
@@ -214,7 +215,7 @@ const Calculator = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-white text-lg">{option.text}</span>
+                      <span className="text-white text-lg font-medium">{option.text}</span>
                       <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-amber-400 transition-colors" />
                     </div>
                   </motion.button>
@@ -234,22 +235,23 @@ const Calculator = () => {
                 <AlertTriangle className={`w-10 h-10 ${results?.color}`} />
               </div>
               <h2 className={`text-3xl md:text-4xl font-bold ${results?.color} mb-4`}>
+              <h2 className={`text-3xl md:text-4xl font-black ${results?.color} mb-4 tracking-tight`}>
                 {results?.level}
               </h2>
-              <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              <p className="text-gray-300 text-lg max-w-2xl mx-auto font-medium">
                 {results?.description}
               </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               <div className="bg-slate-800 rounded-xl p-6">
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <h3 className="text-xl font-extra-bold text-white mb-4 flex items-center tracking-tight">
                   <Check className="w-6 h-6 text-green-400 mr-2" />
                   Recommendations
                 </h3>
                 <ul className="space-y-2">
                   {results?.recommendations.map((rec, index) => (
-                    <li key={index} className="text-gray-300 flex items-start">
+                    <li key={index} className="text-gray-300 flex items-start font-medium">
                       <div className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0" />
                       {rec}
                     </li>
@@ -258,7 +260,7 @@ const Calculator = () => {
               </div>
 
               <div className="bg-slate-800 rounded-xl p-6">
-                <h3 className="text-xl font-bold text-white mb-4">Suggested Programs</h3>
+                <h3 className="text-xl font-extra-bold text-white mb-4 tracking-tight">Suggested Programs</h3>
                 <div className="space-y-3">
                   {results?.programs.map((programId, index) => {
                     const program = {
@@ -276,7 +278,7 @@ const Calculator = () => {
                         className="block bg-slate-700 hover:bg-slate-600 rounded-lg p-3 transition-colors group"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-white">{program?.name}</span>
+                          <span className="text-white font-semibold">{program?.name}</span>
                           <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-amber-400 transition-colors" />
                         </div>
                       </Link>
@@ -289,13 +291,13 @@ const Calculator = () => {
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Link
                 to="/programs/mentorship"
-                className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+                className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105"
               >
                 Get Started Today
               </Link>
               <button
                 onClick={resetCalculator}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors font-semibold"
               >
                 Take Assessment Again
               </button>
@@ -310,7 +312,7 @@ const Calculator = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-12 text-center"
         >
-          <p className="text-sm text-gray-500 max-w-3xl mx-auto">
+          <p className="text-sm text-gray-500 max-w-3xl mx-auto font-medium">
             This assessment is for informational purposes only and does not constitute medical or professional advice. 
             If you're experiencing severe addiction symptoms or mental health concerns, please seek immediate professional help.
           </p>

@@ -25,19 +25,19 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight tracking-tight">
             Break Free from
             <span className="bg-gradient-to-r from-amber-600 to-red-700 bg-clip-text text-transparent"> Addiction</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed font-medium">
             Start your journey to freedom today with proven strategies, community support, and personalized guidance designed specifically for men.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
             <Link
               to="/calculator"
-              className="group bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
+              className="group bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
             >
               <Calculator className="w-5 h-5" />
               <span>Take the Calculator</span>
@@ -46,7 +46,7 @@ const Hero = () => {
             
             <Link
               to="/free-ebook"
-              className="group bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center space-x-2"
+              className="group bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 flex items-center space-x-2"
             >
               <Download className="w-5 h-5" />
               <span>Free Recovery Guide</span>
@@ -61,8 +61,8 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-center"
             >
-              <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">500+</div>
-              <div className="text-gray-300">Men Helped</div>
+              <div className="text-3xl md:text-4xl font-extra-bold text-amber-400 mb-2">500+</div>
+              <div className="text-gray-300 font-semibold">Men Helped</div>
             </motion.div>
             
             <motion.div
@@ -71,8 +71,8 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-center"
             >
-              <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">87%</div>
-              <div className="text-gray-300">Success Rate</div>
+              <div className="text-3xl md:text-4xl font-extra-bold text-amber-400 mb-2">87%</div>
+              <div className="text-gray-300 font-semibold">Success Rate</div>
             </motion.div>
             
             <motion.div
@@ -81,8 +81,8 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="text-center"
             >
-              <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">24/7</div>
-              <div className="text-gray-300">Support Available</div>
+              <div className="text-3xl md:text-4xl font-extra-bold text-amber-400 mb-2">24/7</div>
+              <div className="text-gray-300 font-semibold">Support Available</div>
             </motion.div>
           </div>
         </motion.div>

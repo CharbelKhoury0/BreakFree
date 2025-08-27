@@ -69,9 +69,9 @@ const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-red-500 rounded-lg flex items-center justify-center">
-            className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              <span className="text-white font-black text-sm">BF</span>
             </div>
-            <span className="text-white font-bold text-xl">BreakFree</span>
+            <span className="text-white font-black text-xl tracking-tight">BreakFree</span>
           </Link>
 
           {/* Desktop Menu */}
@@ -85,13 +85,13 @@ const Navigation = () => {
               >
                 {item.path === '#' ? (
                   <button className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors">
-                    <span>{item.title}</span>
+                    <span className="font-semibold">{item.title}</span>
                     {item.dropdown && <ChevronDown className="w-4 h-4" />}
                   </button>
                 ) : (
                   <Link
                     to={item.path}
-                    className="text-gray-300 hover:text-white transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors font-semibold"
                   >
                     {item.title}
                   </Link>
@@ -111,7 +111,7 @@ const Navigation = () => {
                         <Link
                           key={dropdownIndex}
                           to={dropdownItem.path}
-                          className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 transition-colors"
+                          className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 transition-colors font-medium"
                         >
                           {dropdownItem.title}
                         </Link>
@@ -127,7 +127,7 @@ const Navigation = () => {
           <div className="hidden md:block">
             <Link
               to="/calculator"
-              className="bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-6 py-2 rounded-lg font-bold transition-all duration-300 transform hover:scale-105"
             >
               Take the Calculator
             </Link>
@@ -161,7 +161,7 @@ const Navigation = () => {
                         onClick={() => setActiveDropdown(
                           activeDropdown === item.title ? null : item.title
                         )}
-                        className="flex items-center justify-between w-full text-gray-300 hover:text-white"
+                        className="flex items-center justify-between w-full text-gray-300 hover:text-white font-semibold"
                       >
                         <span>{item.title}</span>
                         <ChevronDown className={`w-4 h-4 transition-transform ${
@@ -174,7 +174,7 @@ const Navigation = () => {
                             <Link
                               key={dropdownIndex}
                               to={dropdownItem.path}
-                              className="block text-gray-400 hover:text-white"
+                              className="block text-gray-400 hover:text-white font-medium"
                             >
                               {dropdownItem.title}
                             </Link>
@@ -185,7 +185,7 @@ const Navigation = () => {
                   ) : (
                     <Link
                       to={item.path}
-                      className="block text-gray-300 hover:text-white"
+                      className="block text-gray-300 hover:text-white font-semibold"
                     >
                       {item.title}
                     </Link>
@@ -194,7 +194,7 @@ const Navigation = () => {
               ))}
               <Link
                 to="/calculator"
-                className="block w-full bg-gradient-to-r from-amber-600 to-red-700 text-white px-4 py-2 rounded-lg font-semibold text-center"
+                className="block w-full bg-gradient-to-r from-amber-600 to-red-700 text-white px-4 py-2 rounded-lg font-bold text-center"
               >
                 Take the Calculator
               </Link>

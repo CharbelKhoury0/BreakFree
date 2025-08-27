@@ -32,15 +32,15 @@ const Home = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
                 Our Mission: Helping Men Quit Addiction and Rebuild Their Life
               </h2>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed font-medium">
                 We understand the unique challenges men face when dealing with addiction. Our evidence-based approach combines professional guidance, peer support, and practical tools to create lasting change.
               </p>
               <Link
                 to="/about/story"
-                className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-semibold text-lg"
+                className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-bold text-lg"
               >
                 <span>Learn Our Story</span>
                 <ArrowRight className="w-5 h-5" />
@@ -68,8 +68,8 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-semibold text-lg">Our Approach to Recovery</h3>
-                  <p className="text-gray-200 text-sm">See how we help men break free from addiction</p>
+                  <h3 className="text-white font-bold text-lg">Our Approach to Recovery</h3>
+                  <p className="text-gray-200 text-sm font-medium">See how we help men break free from addiction</p>
                 </div>
               </div>
             </motion.div>
@@ -87,10 +87,10 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
               Comprehensive Recovery Programs
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
               Choose from our range of evidence-based programs designed to meet you wherever you are in your recovery journey.
             </p>
           </motion.div>
@@ -111,25 +111,25 @@ const Home = () => {
                     <IconComponent className="w-8 h-8 text-white" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-white mb-4">{program.title}</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">{program.description}</p>
+                  <h3 className="text-2xl font-extra-bold text-white mb-4 tracking-tight">{program.title}</h3>
+                  <p className="text-gray-300 mb-6 leading-relaxed font-medium">{program.description}</p>
                   
                   <div className="space-y-2 mb-8">
                     {program.features.slice(0, 3).map((feature, featureIndex) => (
                       <div key={featureIndex} className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-amber-400 rounded-full" />
-                        <span className="text-gray-400 text-sm">{feature}</span>
+                        <span className="text-gray-400 text-sm font-medium">{feature}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="flex items-center justify-between">
                     {program.price && (
-                      <span className="text-amber-400 font-semibold text-lg">{program.price}</span>
+                      <span className="text-amber-400 font-bold text-lg">{program.price}</span>
                     )}
                     <Link
                       to={program.path}
-                      className="inline-flex items-center space-x-2 text-white hover:text-amber-400 transition-colors group"
+                      className="inline-flex items-center space-x-2 text-white hover:text-amber-400 transition-colors group font-semibold"
                     >
                       <span>Learn More</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -152,10 +152,10 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
               Success Stories
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
               Real men sharing their journey to freedom and the life-changing results they've achieved.
             </p>
           </motion.div>
@@ -174,10 +174,10 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
               Trusted by Thousands
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
               Our proven methodology and certifications ensure you receive the highest quality support.
             </p>
           </motion.div>
@@ -193,8 +193,8 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-white font-bold text-xl mb-2">Certified</h3>
-              <p className="text-gray-400">Licensed addiction counselors and therapists</p>
+              <h3 className="text-white font-extra-bold text-xl mb-2">Certified</h3>
+              <p className="text-gray-400 font-medium">Licensed addiction counselors and therapists</p>
             </motion.div>
 
             <motion.div
@@ -207,8 +207,8 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-white font-bold text-xl mb-2">Proven</h3>
-              <p className="text-gray-400">87% success rate with evidence-based methods</p>
+              <h3 className="text-white font-extra-bold text-xl mb-2">Proven</h3>
+              <p className="text-gray-400 font-medium">87% success rate with evidence-based methods</p>
             </motion.div>
 
             <motion.div
@@ -221,8 +221,8 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-white font-bold text-xl mb-2">Confidential</h3>
-              <p className="text-gray-400">Complete privacy and discretion guaranteed</p>
+              <h3 className="text-white font-extra-bold text-xl mb-2">Confidential</h3>
+              <p className="text-gray-400 font-medium">Complete privacy and discretion guaranteed</p>
             </motion.div>
 
             <motion.div
@@ -235,8 +235,8 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-white font-bold text-xl mb-2">Compassionate</h3>
-              <p className="text-gray-400">Understanding, judgment-free support</p>
+              <h3 className="text-white font-extra-bold text-xl mb-2">Compassionate</h3>
+              <p className="text-gray-400 font-medium">Understanding, judgment-free support</p>
             </motion.div>
           </div>
         </div>
@@ -251,15 +251,15 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
               Ready to Break Free?
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-medium">
               Take the first step towards freedom. Our addiction calculator will help you understand where you are and recommend the right program for your needs.
             </p>
             <Link
               to="/calculator"
-              className="inline-flex items-center space-x-2 bg-white text-slate-900 hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center space-x-2 bg-white text-slate-900 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105"
             >
               <span>Start Your Assessment</span>
               <ArrowRight className="w-5 h-5" />
