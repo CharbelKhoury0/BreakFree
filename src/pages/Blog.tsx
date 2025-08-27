@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Calendar, Clock, User, ArrowRight, Filter } from 'lucide-react';
+import NewsletterForm from '../components/NewsletterForm';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -295,19 +296,13 @@ const Blog = () => {
             <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
               Get concise insights delivered to your inbox.
             </p>
-            <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
-              <input
-                type="email"
+            <div className="max-w-md mx-auto">
+              <NewsletterForm 
+                source="blog_newsletter"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg border border-white/10 bg-slate-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+                buttonText="Subscribe"
               />
-              <button className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">
-                Subscribe
-              </button>
             </div>
-            <p className="text-white/60 text-sm mt-4 font-medium">
-              No spam. Unsubscribe anytime.
-            </p>
           </motion.div>
         </div>
       </section>

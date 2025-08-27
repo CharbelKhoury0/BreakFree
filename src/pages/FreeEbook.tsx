@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Download, BookOpen, CheckCircle, Star, Users, Clock, Shield, Target, Brain } from 'lucide-react';
+import { ArrowRight, Download, BookOpen, CheckCircle, Star, Users, Clock, Shield, Target, Brain, Loader, AlertCircle } from 'lucide-react';
+import { mailerLiteService } from '../services/mailerlite';
 
 const FreeEbook = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,8 @@ const FreeEbook = () => {
     primaryChallenge: ''
   });
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -20,11 +22,31 @@ const FreeEbook = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
+    
+    if (!formData.email || !formData.firstName) {
+      setStatus('error');
+      setMessage('Please fill in all required fields');
+      return;
+    }
+
+    setStatus('loading');
+    
+    try {
+      const result = await mailerLiteService.subscribeToFreeEbook(formData);
+      
+      if (result.success) {
+        setStatus('success');
+        setMessage('Check your email for the download link!');
+      } else {
+        setStatus('error');
+        setMessage(result.message);
+      }
+    } catch (error) {
+      setStatus('error');
+      setMessage('Something went wrong. Please try again.');
+    }
   };
 
   const ebookFeatures = [
@@ -104,7 +126,7 @@ const FreeEbook = () => {
     }
   ];
 
-  if (isSubmitted) {
+  if (status === 'success') {
     return (
       <div className="bg-slate-950 min-h-screen pt-20 flex items-center justify-center">
         <motion.div
@@ -121,7 +143,7 @@ const FreeEbook = () => {
               Check Your Email!
             </h1>
             <p className="text-lg text-gray-300 mb-8 font-medium">
-              We've sent "The Complete Recovery Blueprint" to <strong>{formData.email}</strong>. 
+              We've sent "The Complete Recovery Blueprint" to <strong>{formData.email}</strong>.
               Check your inbox (and spam folder) for your free download link.
             </p>
             <div className="space-y-3 sm:space-y-4">
@@ -223,8 +245,9 @@ const FreeEbook = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
+                    disabled={status === 'loading'}
                     required
-                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base"
+                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base disabled:opacity-50"
                     placeholder="Enter your first name"
                   />
                 </div>
@@ -239,8 +262,9 @@ const FreeEbook = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    disabled={status === 'loading'}
                     required
-                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base"
+                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base disabled:opacity-50"
                     placeholder="Enter your email address"
                   />
                 </div>
@@ -254,7 +278,8 @@ const FreeEbook = () => {
                     name="recoveryStage"
                     value={formData.recoveryStage}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base"
+                    disabled={status === 'loading'}
+                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base disabled:opacity-50"
                   >
                     <option value="">Select your stage</option>
                     <option value="considering">Considering recovery</option>
@@ -274,7 +299,8 @@ const FreeEbook = () => {
                     name="primaryChallenge"
                     value={formData.primaryChallenge}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base"
+                    disabled={status === 'loading'}
+                    className="w-full px-4 py-3 sm:py-4 bg-slate-950 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/20 font-medium min-h-[48px] text-base disabled:opacity-50"
                   >
                     <option value="">Select your main challenge</option>
                     <option value="motivation">Staying motivated</option>
@@ -288,11 +314,32 @@ const FreeEbook = () => {
                 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center space-x-2 border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 min-h-[48px]"
+                  disabled={status === 'loading'}
+                  className="w-full inline-flex items-center justify-center space-x-2 border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 min-h-[48px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Download className="w-5 h-5" />
-                  <span>Get Free Blueprint</span>
+                  {status === 'loading' ? (
+                    <>
+                      <Loader className="w-5 h-5 animate-spin" />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-5 h-5" />
+                      <span>Get Free Blueprint</span>
+                    </>
+                  )}
                 </button>
+                
+                {status === 'error' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center space-x-2 text-red-400 text-sm"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{message}</span>
+                  </motion.div>
+                )}
                 
                 <p className="text-gray-400 text-sm text-center font-medium">
                   No spam. Unsubscribe anytime. Your privacy is protected.
