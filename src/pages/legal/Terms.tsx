@@ -2,8 +2,22 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FileText, AlertTriangle, Shield, Users, Gavel, Clock } from 'lucide-react';
 
+// TypeScript interfaces for better type safety
+interface ContentItem {
+  subtitle?: string;
+  text?: string;
+  list?: string[];
+}
+
+interface Section {
+  id: string;
+  title: string;
+  icon: React.ComponentType<any>;
+  content: ContentItem[];
+}
+
 const Terms = () => {
-  const sections = [
+  const sections: Section[] = [
     {
       id: 'acceptance',
       title: 'Acceptance of Terms',
@@ -238,18 +252,18 @@ const Terms = () => {
                   </div>
                   
                   <div className="space-y-6">
-                    {section.content.map((item, itemIndex) => (
-                      <div key={itemIndex}>
+                    {section.content.map((item: ContentItem, itemIndex: number) => (
+                      <div key={`content-${section.id}-${itemIndex}`} className="space-y-3">
                         {item.subtitle && (
                           <h3 className="text-xl font-bold text-white mb-3">{item.subtitle}</h3>
                         )}
                         {item.text && (
                           <p className="text-gray-300 leading-relaxed font-medium">{item.text}</p>
                         )}
-                        {item.list && (
+                        {item.list && item.list.length > 0 && (
                           <ul className="space-y-2 mt-4">
-                            {item.list.map((listItem, listIndex) => (
-                              <li key={listIndex} className="flex items-start space-x-2">
+                            {item.list.map((listItem: string, listIndex: number) => (
+                              <li key={`list-${section.id}-${itemIndex}-${listIndex}`} className="flex items-start space-x-2">
                                 <div className="w-1.5 h-1.5 bg-white/40 rounded-full mt-2 flex-shrink-0"></div>
                                 <span className="text-gray-300 font-medium">{listItem}</span>
                               </li>
