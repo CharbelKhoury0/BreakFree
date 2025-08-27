@@ -136,10 +136,10 @@ const Navigation = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="md:hidden text-white p-3 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
             aria-label="Toggle mobile menu"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
           </button>
         </div>
       </div>

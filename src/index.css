@@ -72,6 +72,23 @@
       min-height: 100vh;
       min-height: 100dvh; /* Dynamic viewport height for mobile */
     }
+
+    /* Better text wrapping for mobile */
+    h1 {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* Improve button spacing on mobile */
+    .space-x-2 > * + * {
+      margin-left: 0.5rem;
+    }
+
+    /* Better mobile padding */
+    .px-4 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
   }
 
   /* Additional mobile fixes */
@@ -86,6 +103,19 @@
     h1 {
       word-wrap: break-word;
       hyphens: auto;
+      font-size: 2.25rem !important;
+      line-height: 1.1 !important;
+    }
+
+    /* Smaller buttons on very small screens */
+    .min-h-\[52px\] {
+      min-height: 48px;
+    }
+
+    /* Tighter spacing */
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
   }
 }
