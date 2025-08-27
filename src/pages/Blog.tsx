@@ -153,7 +153,6 @@ const Blog = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
               className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-500 transition-all duration-300"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -164,7 +163,6 @@ const Blog = () => {
                   />
                 </div>
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
-                  <div className="inline-block bg-gradient-to-r from-amber-400 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
                   <div className="inline-block bg-gradient-to-r from-amber-600 to-red-700 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
                     Featured
                   </div>
@@ -215,7 +213,6 @@ const Blog = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-400/30 transition-all duration-300 group"
                 className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-500 transition-all duration-300 group"
               >
                 <div className="aspect-video overflow-hidden">
