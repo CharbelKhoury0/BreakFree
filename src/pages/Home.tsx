@@ -105,10 +105,8 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-slate-800 rounded-2xl p-8 hover:bg-slate-750 transition-all duration-300 group border border-slate-700 hover:border-amber-400/30"
                   className="bg-slate-800 rounded-2xl p-8 hover:bg-slate-750 transition-all duration-300 group border border-slate-700 hover:border-amber-500"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <IconComponent className="w-8 h-8 text-white" />
                   </div>
@@ -190,10 +188,8 @@ const Home = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
               className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-white" />
               </div>
@@ -206,10 +202,8 @@ const Home = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
               className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-white" />
               </div>
@@ -222,10 +216,8 @@ const Home = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
               className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-white" />
               </div>
@@ -238,10 +230,8 @@ const Home = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-400/30 transition-all duration-300"
               className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8 text-white" />
               </div>
