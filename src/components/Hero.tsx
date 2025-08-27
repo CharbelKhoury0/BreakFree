@@ -5,7 +5,7 @@ import { ArrowRight, Calculator, Download } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 sm:pt-24 md:pt-20 lg:pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24 md:pt-20 lg:pt-16 pb-8">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -25,42 +25,42 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 sm:mb-6 leading-tight tracking-tight px-2">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 sm:mb-8 leading-tight tracking-tight px-2">
             Focused. Accountable. Free.
           </h1>
           
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 max-w-3xl mx-auto leading-relaxed font-medium px-4">
+          <p className="text-lg sm:text-xl md:text-xl text-gray-300 mb-10 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-medium px-4">
             A clear path to quit addiction. Built for men who value structure, discipline, and real results.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-10 sm:mb-12 px-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-4 mb-12 sm:mb-16 px-4">
             <Link
               to="/calculator"
-              className="group bg-white/5 hover:bg-white/10 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 border border-white/10 w-full sm:w-auto min-h-[48px]"
+              className="group bg-white/5 hover:bg-white/10 text-white px-8 sm:px-8 py-4 sm:py-4 rounded-xl font-bold text-lg sm:text-lg transition-all duration-300 flex items-center justify-center space-x-3 border border-white/10 w-full sm:w-auto min-h-[56px]"
             >
-              <Calculator className="w-5 h-5" />
+              <Calculator className="w-6 h-6" />
               <span>Start Assessment</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </Link>
             
             <Link
               to="/free-ebook"
-              className="group bg-transparent border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto min-h-[48px]"
+              className="group bg-transparent border border-white/15 hover:border-white/30 text-white px-8 sm:px-8 py-4 sm:py-4 rounded-xl font-bold text-lg sm:text-lg transition-all duration-300 flex items-center justify-center space-x-3 w-full sm:w-auto min-h-[56px]"
             >
-              <Download className="w-5 h-5" />
+              <Download className="w-6 h-6" />
               <span>Free Guide</span>
             </Link>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-3xl mx-auto px-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 max-w-3xl mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-center"
             >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1 sm:mb-2">500+</div>
+              <div className="text-3xl sm:text-4xl md:text-4xl font-black text-white mb-2 sm:mb-2">500+</div>
               <div className="text-gray-400 font-semibold text-sm sm:text-base">Men Helped</div>
             </motion.div>
             
@@ -70,7 +70,7 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-center"
             >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1 sm:mb-2">87%</div>
+              <div className="text-3xl sm:text-4xl md:text-4xl font-black text-white mb-2 sm:mb-2">87%</div>
               <div className="text-gray-400 font-semibold text-sm sm:text-base">Success Rate</div>
             </motion.div>
             
@@ -78,9 +78,9 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-center"
+              className="text-center col-span-2 sm:col-span-1"
             >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1 sm:mb-2">24/7</div>
+              <div className="text-3xl sm:text-4xl md:text-4xl font-black text-white mb-2 sm:mb-2">24/7</div>
               <div className="text-gray-400 font-semibold text-sm sm:text-base">Support</div>
             </motion.div>
           </div>

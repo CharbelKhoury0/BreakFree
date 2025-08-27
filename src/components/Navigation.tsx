@@ -65,13 +65,13 @@ const Navigation = () => {
       scrolled ? 'bg-slate-950/90 backdrop-blur-sm border-b border-white/5' : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-sm">BF</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center">
+              <span className="text-white font-black text-sm sm:text-base">BF</span>
             </div>
-            <span className="text-white font-black text-xl tracking-tight">BreakFree</span>
+            <span className="text-white font-black text-xl sm:text-2xl tracking-tight">BreakFree</span>
           </Link>
 
           {/* Desktop Menu */}
@@ -137,6 +137,7 @@ const Navigation = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label="Toggle mobile menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -150,9 +151,9 @@ const Navigation = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-slate-950/90 border-t border-white/5"
+            className="md:hidden bg-slate-950/95 backdrop-blur-sm border-t border-white/5"
           >
-            <div className="px-4 py-4 space-y-4">
+            <div className="px-4 py-6 space-y-6">
               {menuItems.map((item, index) => (
                 <div key={index}>
                   {item.path === '#' ? (
@@ -161,7 +162,7 @@ const Navigation = () => {
                         onClick={() => setActiveDropdown(
                           activeDropdown === item.title ? null : item.title
                         )}
-                        className="flex items-center justify-between w-full text-gray-300 hover:text-white font-semibold"
+                        className="flex items-center justify-between w-full text-gray-300 hover:text-white font-semibold py-2"
                       >
                         <span>{item.title}</span>
                         <ChevronDown className={`w-4 h-4 transition-transform ${
@@ -169,12 +170,12 @@ const Navigation = () => {
                         }`} />
                       </button>
                       {activeDropdown === item.title && item.dropdown && (
-                        <div className="mt-2 ml-4 space-y-2">
+                        <div className="mt-3 ml-4 space-y-3">
                           {item.dropdown.map((dropdownItem, dropdownIndex) => (
                             <Link
                               key={dropdownIndex}
                               to={dropdownItem.path}
-                              className="block text-gray-400 hover:text-white font-medium"
+                              className="block text-gray-400 hover:text-white font-medium py-1"
                             >
                               {dropdownItem.title}
                             </Link>
@@ -185,19 +186,21 @@ const Navigation = () => {
                   ) : (
                     <Link
                       to={item.path}
-                      className="block text-gray-300 hover:text-white font-semibold"
+                      className="block text-gray-300 hover:text-white font-semibold py-2"
                     >
                       {item.title}
                     </Link>
                   )}
                 </div>
               ))}
-              <Link
-                to="/calculator"
-                className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-3 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
-              >
-                Assessment
-              </Link>
+              <div className="pt-4 border-t border-white/10">
+                <Link
+                  to="/calculator"
+                  className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
+                >
+                  Assessment
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
