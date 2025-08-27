@@ -19,11 +19,11 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-slate-900">
+    <div className="bg-slate-950">
       <Hero />
 
       {/* Video Section */}
-      <section className="py-20 bg-slate-800">
+      <section className="py-20 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -33,16 +33,16 @@ const Home = () => {
               viewport={{ once: true }}
             >
               <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
-                Our Mission: Helping Men Quit Addiction and Rebuild Their Life
+                A disciplined path to recovery
               </h2>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed font-medium">
-                We understand the unique challenges men face when dealing with addiction. Our evidence-based approach combines professional guidance, peer support, and practical tools to create lasting change.
+              <p className="text-lg text-gray-300 mb-8 leading-relaxed font-medium">
+                Our approach is direct and practical. Structure, accountability, and a community that holds the line.
               </p>
               <Link
                 to="/about/story"
-                className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-bold text-lg"
+                className="inline-flex items-center space-x-2 text-white hover:text-gray-200 font-bold text-lg"
               >
-                <span>Learn Our Story</span>
+                <span>Learn more</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </motion.div>
@@ -54,22 +54,22 @@ const Home = () => {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="relative aspect-video bg-slate-700 rounded-2xl overflow-hidden group cursor-pointer">
+              <div className="relative aspect-video bg-slate-800 rounded-2xl overflow-hidden group cursor-pointer border border-white/10">
                 <div 
                   className="absolute inset-0 bg-cover bg-center"
                   style={{
                     backgroundImage: 'url(https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg)'
                   }}
                 />
-                <div className="absolute inset-0 bg-slate-900/50 group-hover:bg-slate-900/30 transition-colors" />
+                <div className="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/40 transition-colors" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 bg-amber-500 hover:bg-amber-400 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 text-white ml-1" />
+                  <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform border border-white/20">
+                    <Play className="w-7 h-7 text-white ml-1" />
                   </div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">Our Approach to Recovery</h3>
-                  <p className="text-gray-200 text-sm font-medium">See how we help men break free from addiction</p>
+                  <h3 className="text-white font-bold text-lg">Our approach</h3>
+                  <p className="text-gray-300 text-sm font-medium">What to expect from day one</p>
                 </div>
               </div>
             </motion.div>
@@ -78,7 +78,7 @@ const Home = () => {
       </section>
 
       {/* Services Preview */}
-      <section className="py-20 bg-slate-900">
+      <section className="py-20 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -88,10 +88,10 @@ const Home = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
-              Comprehensive Recovery Programs
+              Programs built to perform
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
-              Choose from our range of evidence-based programs designed to meet you wherever you are in your recovery journey.
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+              Choose the structure that fits your pace. Every path is clear, focused, and accountable.
             </p>
           </motion.div>
 
@@ -105,19 +105,19 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-slate-800 rounded-2xl p-8 hover:bg-slate-750 transition-all duration-300 group border border-slate-700 hover:border-amber-500"
+                  className="bg-slate-900 rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-colors"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <IconComponent className="w-8 h-8 text-white" />
+                  <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-6">
+                    <IconComponent className="w-7 h-7 text-white" />
                   </div>
                   
-                  <h3 className="text-2xl font-extra-bold text-white mb-4 tracking-tight">{program.title}</h3>
+                  <h3 className="text-2xl font-black text-white mb-4 tracking-tight">{program.title}</h3>
                   <p className="text-gray-300 mb-6 leading-relaxed font-medium">{program.description}</p>
                   
                   <div className="space-y-2 mb-8">
                     {program.features.slice(0, 3).map((feature, featureIndex) => (
                       <div key={featureIndex} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-amber-400 rounded-full" />
+                        <div className="w-2 h-2 bg-white/30 rounded-full" />
                         <span className="text-gray-400 text-sm font-medium">{feature}</span>
                       </div>
                     ))}
@@ -125,14 +125,14 @@ const Home = () => {
 
                   <div className="flex items-center justify-between">
                     {program.price && (
-                      <span className="text-amber-400 font-bold text-lg">{program.price}</span>
+                      <span className="text-white font-bold text-lg">{program.price}</span>
                     )}
                     <Link
                       to={program.path}
-                      className="inline-flex items-center space-x-2 text-white hover:text-amber-400 transition-colors group font-semibold"
+                      className="inline-flex items-center space-x-2 text-white hover:text-gray-200 transition-colors font-semibold"
                     >
-                      <span>Learn More</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <span>Learn more</span>
+                      <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </motion.div>
@@ -143,28 +143,6 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
-              Success Stories
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
-              Real men sharing their journey to freedom and the life-changing results they've achieved.
-            </p>
-          </motion.div>
-
-          <TestimonialCarousel />
-        </div>
-      </section>
-
-      {/* Authority Section */}
       <section className="py-20 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -175,75 +153,97 @@ const Home = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
-              Trusted by Thousands
+              Success stories
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
-              Our proven methodology and certifications ensure you receive the highest quality support.
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+              Men who chose discipline—and changed their lives.
+            </p>
+          </motion.div>
+
+          <TestimonialCarousel />
+        </div>
+      </section>
+
+      {/* Authority Section */}
+      <section className="py-20 bg-slate-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+              Proven. Confidential. Built for men.
+            </h2>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+              Evidence-based methods, professional guidance, and a culture of accountability.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
+              className="bg-slate-900 rounded-2xl p-8 text-center border border-white/10"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-white" />
+              <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-white font-extra-bold text-xl mb-2">Certified</h3>
+              <h3 className="text-white font-black text-xl mb-2">Certified</h3>
               <p className="text-gray-400 font-medium">Licensed addiction counselors and therapists</p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
+              className="bg-slate-900 rounded-2xl p-8 text-center border border-white/10"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-white" />
+              <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-white font-extra-bold text-xl mb-2">Proven</h3>
+              <h3 className="text-white font-black text-xl mb-2">Proven</h3>
               <p className="text-gray-400 font-medium">87% success rate with evidence-based methods</p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
+              className="bg-slate-900 rounded-2xl p-8 text-center border border-white/10"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-white" />
+              <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-white font-extra-bold text-xl mb-2">Confidential</h3>
-              <p className="text-gray-400 font-medium">Complete privacy and discretion guaranteed</p>
+              <h3 className="text-white font-black text-xl mb-2">Confidential</h3>
+              <p className="text-gray-400 font-medium">Private, secure, and discreet</p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl p-8 text-center border border-slate-700 hover:border-amber-500 transition-all duration-300"
+              className="bg-slate-900 rounded-2xl p-8 text-center border border-white/10"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-white" />
+              <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-white font-extra-bold text-xl mb-2">Compassionate</h3>
-              <p className="text-gray-400 font-medium">Understanding, judgment-free support</p>
+              <h3 className="text-white font-black text-xl mb-2">Supportive</h3>
+              <p className="text-gray-400 font-medium">Firm, respectful, and consistent</p>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-amber-600 to-red-700">
+      <section className="py-20 bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -252,16 +252,16 @@ const Home = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
-              Ready to Break Free?
+              Ready to get to work?
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-medium">
-              Take the first step towards freedom. Our addiction calculator will help you understand where you are and recommend the right program for your needs.
+            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
+              Start with a quick assessment. Get a plan. Execute.
             </p>
             <Link
               to="/calculator"
-              className="inline-flex items-center space-x-2 bg-white text-slate-900 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center space-x-2 border border-white/15 hover:border-white/30 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300"
             >
-              <span>Start Your Assessment</span>
+              <span>Start assessment</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>

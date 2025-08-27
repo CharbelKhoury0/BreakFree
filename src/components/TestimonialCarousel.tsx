@@ -13,10 +13,10 @@ const TestimonialCard = ({ item }: { item: Testimonial }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.35 }}
-      className="bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-lg mx-auto max-w-3xl"
+      className="bg-slate-900 border border-white/10 rounded-2xl p-8 mx-auto max-w-3xl"
     >
       <div className="flex items-start gap-4">
-        <div className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-red-700 flex items-center justify-center text-white font-bold">
+        <div className="shrink-0 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-bold">
           {item.name?.[0] ?? 'U'}
         </div>
         <div className="space-y-2">
@@ -60,7 +60,7 @@ const TestimonialCarousel = () => {
         <button
           aria-label="Previous testimonial"
           onClick={goPrev}
-          className="p-2 rounded-lg border border-slate-700 text-gray-300 hover:text-white hover:border-slate-600 bg-slate-800/60"
+          className="p-2 rounded-lg border border-white/15 text-gray-300 hover:text-white hover:border-white/30 bg-transparent"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -68,14 +68,14 @@ const TestimonialCarousel = () => {
           {testimonials.map((t, i) => (
             <span
               key={t.id}
-              className={`h-2 w-2 rounded-full ${i === index ? 'bg-amber-500' : 'bg-slate-600'}`}
+              className={`h-1.5 w-1.5 rounded-full ${i === index ? 'bg-white' : 'bg-white/30'}`}
             />
           ))}
         </div>
         <button
           aria-label="Next testimonial"
           onClick={goNext}
-          className="p-2 rounded-lg border border-slate-700 text-gray-300 hover:text-white hover:border-slate-600 bg-slate-800/60"
+          className="p-2 rounded-lg border border-white/15 text-gray-300 hover:text-white hover:border-white/30 bg-transparent"
         >
           <ChevronRight className="w-5 h-5" />
         </button>

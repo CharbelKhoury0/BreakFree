@@ -11,7 +11,7 @@ import Blog from './pages/Blog';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-slate-900">
+      <div className="min-h-screen bg-slate-950">
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -20,11 +20,11 @@ function App() {
           <Route path="/programs/community" element={<Community />} />
           <Route path="/blog" element={<Blog />} />
           {/* Placeholder routes for other pages */}
-          <Route path="/programs/sessions" element={<div className="min-h-screen bg-slate-900 pt-20 flex items-center justify-center"><div className="text-white text-2xl">Recovery Sessions - Coming Soon</div></div>} />
-          <Route path="/programs/ebooks" element={<div className="min-h-screen bg-slate-900 pt-20 flex items-center justify-center"><div className="text-white text-2xl">Ebooks - Coming Soon</div></div>} />
-          <Route path="/programs/tools" element={<div className="min-h-screen bg-slate-900 pt-20 flex items-center justify-center"><div className="text-white text-2xl">Tools - Coming Soon</div></div>} />
-          <Route path="/free-ebook" element={<div className="min-h-screen bg-slate-900 pt-20 flex items-center justify-center"><div className="text-white text-2xl">Free Ebook - Coming Soon</div></div>} />
-          <Route path="/about/*" element={<div className="min-h-screen bg-slate-900 pt-20 flex items-center justify-center"><div className="text-white text-2xl">About Pages - Coming Soon</div></div>} />
+          <Route path="/programs/sessions" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Recovery Sessions</div></div>} />
+          <Route path="/programs/ebooks" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Ebooks</div></div>} />
+          <Route path="/programs/tools" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Tools</div></div>} />
+          <Route path="/free-ebook" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">Free Guide</div></div>} />
+          <Route path="/about/*" element={<div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center"><div className="text-white text-2xl font-black">About</div></div>} />
         </Routes>
         <Footer />
       </div>

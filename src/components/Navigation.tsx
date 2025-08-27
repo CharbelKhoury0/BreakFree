@@ -62,13 +62,13 @@ const Navigation = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-slate-900/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+      scrolled ? 'bg-slate-950/90 backdrop-blur-sm border-b border-white/5' : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-red-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
               <span className="text-white font-black text-sm">BF</span>
             </div>
             <span className="text-white font-black text-xl tracking-tight">BreakFree</span>
@@ -105,13 +105,13 @@ const Navigation = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 mt-2 w-56 bg-slate-800 rounded-lg shadow-xl border border-slate-700 py-2"
+                      className="absolute top-full left-0 mt-2 w-56 bg-slate-900/95 rounded-lg shadow-xl border border-white/10 py-2"
                     >
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
                         <Link
                           key={dropdownIndex}
                           to={dropdownItem.path}
-                          className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 transition-colors font-medium"
+                          className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
                         >
                           {dropdownItem.title}
                         </Link>
@@ -127,9 +127,9 @@ const Navigation = () => {
           <div className="hidden md:block">
             <Link
               to="/calculator"
-              className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white px-6 py-2 rounded-lg font-bold transition-all duration-300 transform hover:scale-105"
+              className="border border-white/15 hover:border-white/30 text-white px-6 py-2 rounded-lg font-bold transition-all duration-300"
             >
-              Take the Calculator
+              Assessment
             </Link>
           </div>
 
@@ -150,7 +150,7 @@ const Navigation = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-slate-900 border-t border-slate-700"
+            className="md:hidden bg-slate-950/90 border-t border-white/5"
           >
             <div className="px-4 py-4 space-y-4">
               {menuItems.map((item, index) => (
@@ -194,9 +194,9 @@ const Navigation = () => {
               ))}
               <Link
                 to="/calculator"
-                className="block w-full bg-gradient-to-r from-amber-600 to-red-700 text-white px-4 py-2 rounded-lg font-bold text-center"
+                className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-2 rounded-lg font-bold text-center"
               >
-                Take the Calculator
+                Assessment
               </Link>
             </div>
           </motion.div>

@@ -84,7 +84,7 @@ const Blog = () => {
   const regularPosts = filteredPosts.filter(post => !post.featured || selectedCategory !== 'All' || searchTerm);
 
   return (
-    <div className="min-h-screen bg-slate-900 pt-20">
+    <div className="min-h-screen bg-slate-950 pt-20">
       {/* Header */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,18 +95,17 @@ const Blog = () => {
             className="text-center mb-12"
           >
             <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
-              Recovery <span className="bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent">Blog</span>
+              Insights
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium">
-              Expert insights, success stories, and practical advice for your recovery journey. 
-              Learn from professionals and men who have successfully overcome addiction.
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+              Clear guidance, practical tools, and field-tested lessons for recovery.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Search and Filter */}
-      <section className="py-8 bg-slate-800">
+      <section className="py-8 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Search */}
@@ -117,7 +116,7 @@ const Blog = () => {
                 placeholder="Search articles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                className="w-full bg-slate-800 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20"
               />
             </div>
 
@@ -131,8 +130,8 @@ const Blog = () => {
                     onClick={() => setSelectedCategory(category)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                       selectedCategory === category
-                        ? 'bg-amber-500 text-white'
-                        : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                        ? 'bg-white/10 text-white'
+                        : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
                     }`}
                   >
                     {category}
@@ -146,14 +145,14 @@ const Blog = () => {
 
       {/* Featured Post */}
       {featuredPost && selectedCategory === 'All' && !searchTerm && (
-        <section className="py-12 bg-slate-900">
+        <section className="py-12 bg-slate-950">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-500 transition-all duration-300"
+              className="bg-slate-900 rounded-2xl overflow-hidden border border-white/10"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="aspect-video lg:aspect-square">
@@ -163,10 +162,8 @@ const Blog = () => {
                   />
                 </div>
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
-                  <div className="inline-block bg-gradient-to-r from-amber-600 to-red-700 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
-                  <div className="inline-block bg-gradient-to-r from-amber-600 to-red-700 text-white px-3 py-1 rounded-full text-sm font-bold mb-4 w-fit">
+                  <div className="inline-block text-white/80 px-3 py-1 rounded-full text-xs font-semibold mb-4 border border-white/15 w-fit">
                     Featured
-                  </div>
                   </div>
                   <h2 className="text-3xl lg:text-4xl font-black text-white mb-4 leading-tight tracking-tight">
                     {featuredPost.title}
@@ -192,10 +189,10 @@ const Blog = () => {
                   </div>
                   <Link
                     to={`/blog/${featuredPost.id}`}
-                    className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-bold group"
+                    className="inline-flex items-center space-x-2 text-white hover:text-gray-200 font-bold"
                   >
-                    <span>Read Full Article</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <span>Read Article</span>
+                    <ArrowRight className="w-5 h-5" />
                   </Link>
                 </div>
               </div>
@@ -215,20 +212,18 @@ const Blog = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-amber-500 transition-all duration-300 group"
+                className="bg-slate-900 rounded-2xl overflow-hidden border border-white/10"
               >
                 <div className="aspect-video overflow-hidden">
                   <div 
-                    className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full bg-cover bg-center"
                     style={{ backgroundImage: `url(${post.image})` }}
                   />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-medium">
-                    <span className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold">
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold border border-white/15 text-white/80">
                       {post.category}
-                    </span>
                     </span>
                     <div className="flex items-center space-x-2 text-gray-500 text-xs">
                       <Clock className="w-3 h-3" />
@@ -236,7 +231,7 @@ const Blog = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-extra-bold text-white mb-3 leading-tight group-hover:text-amber-400 transition-colors tracking-tight">
+                  <h3 className="text-xl font-black text-white mb-3 leading-tight tracking-tight">
                     {post.title}
                   </h3>
                   
@@ -257,10 +252,10 @@ const Blog = () => {
                   
                   <Link
                     to={`/blog/${post.id}`}
-                    className="inline-flex items-center space-x-2 text-amber-400 hover:text-amber-300 font-semibold text-sm mt-4 group"
+                    className="inline-flex items-center space-x-2 text-white font-semibold text-sm mt-4"
                   >
-                    <span>Read More</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span>Read more</span>
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </motion.article>
@@ -269,16 +264,16 @@ const Blog = () => {
 
           {filteredPosts.length === 0 && (
             <div className="text-center py-16">
-              <h3 className="text-2xl font-extra-bold text-gray-400 mb-4">No articles found</h3>
+              <h3 className="text-2xl font-black text-gray-400 mb-4">No articles found</h3>
               <p className="text-gray-500 mb-8 font-medium">Try adjusting your search terms or category filters.</p>
               <button
                 onClick={() => {
                   setSearchTerm('');
                   setSelectedCategory('All');
                 }}
-                className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-bold transition-colors"
+                className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors"
               >
-                Clear Filters
+                Clear filters
               </button>
             </div>
           )}
@@ -286,7 +281,7 @@ const Blog = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-20 bg-gradient-to-r from-amber-600 to-red-700">
+      <section className="py-20 bg-slate-950">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -295,23 +290,23 @@ const Blog = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
-              Stay Updated
+              Stay sharp
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-medium">
-              Get the latest recovery tips, success stories, and expert advice delivered to your inbox weekly.
+            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
+              Get concise insights delivered to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-white text-slate-900"
+                className="flex-1 px-4 py-3 rounded-lg border border-white/10 bg-slate-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
               />
-              <button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">
+              <button className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">
                 Subscribe
               </button>
             </div>
-            <p className="text-white/70 text-sm mt-4 font-medium">
-              No spam, unsubscribe at any time.
+            <p className="text-white/60 text-sm mt-4 font-medium">
+              No spam. Unsubscribe anytime.
             </p>
           </motion.div>
         </div>
