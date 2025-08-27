@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calculator, Download } from 'lucide-react';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const Hero = () => {
   return (
@@ -37,6 +38,7 @@ const Hero = () => {
             <Link
               to="/calculator"
               className="group bg-white/5 hover:bg-white/10 text-white px-6 sm:px-8 py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 border border-white/10 w-full sm:w-auto min-h-[52px] sm:min-h-[56px] max-w-sm sm:max-w-none"
+              onClick={scrollToTop}
             >
               <Calculator className="w-5 h-5 sm:w-6 sm:h-6" />
               <span>Start Assessment</span>
@@ -46,6 +48,7 @@ const Hero = () => {
             <Link
               to="/free-ebook"
               className="group bg-transparent border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 w-full sm:w-auto min-h-[52px] sm:min-h-[56px] max-w-sm sm:max-w-none"
+              onClick={scrollToTop}
             >
               <Download className="w-5 h-5 sm:w-6 sm:h-6" />
               <span>Free Guide</span>

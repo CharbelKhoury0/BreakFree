@@ -5,6 +5,7 @@ import { ArrowRight, Play, Shield, Users, Target, BookOpen, Wrench, Award, Trend
 import Hero from '../components/Hero';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import { programs } from '../data/programs';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const Home = () => {
   const getIcon = (iconName: string) => {
@@ -41,6 +42,7 @@ const Home = () => {
               <Link
                 to="/about/story"
                 className="inline-flex items-center space-x-2 text-white hover:text-gray-200 font-bold text-lg"
+                onClick={scrollToTop}
               >
                 <span>Learn more</span>
                 <ArrowRight className="w-5 h-5" />
@@ -130,6 +132,7 @@ const Home = () => {
                     <Link
                       to={program.path}
                       className="inline-flex items-center space-x-2 text-white hover:text-gray-200 transition-colors font-semibold"
+                      onClick={scrollToTop}
                     >
                       <span>Learn more</span>
                       <ArrowRight className="w-4 h-4" />
@@ -260,6 +263,7 @@ const Home = () => {
             <Link
               to="/calculator"
               className="inline-flex items-center space-x-2 border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 min-h-[48px]"
+              onClick={scrollToTop}
             >
               <span>Start assessment</span>
               <ArrowRight className="w-5 h-5" />

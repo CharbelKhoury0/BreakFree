@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download, BookOpen, CheckCircle, Star, Users, Clock, Shield, Target, Brain, Loader, AlertCircle } from 'lucide-react';
 import { mailerLiteService } from '../services/mailerlite';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const FreeEbook = () => {
   const [formData, setFormData] = useState({
@@ -150,6 +151,7 @@ const FreeEbook = () => {
               <Link
                 to="/calculator"
                 className="inline-flex items-center space-x-2 border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 w-full justify-center min-h-[48px]"
+                onClick={scrollToTop}
               >
                 <span>Take Recovery Assessment</span>
                 <ArrowRight className="w-5 h-5" />
@@ -157,6 +159,7 @@ const FreeEbook = () => {
               <Link
                 to="/programs/community"
                 className="inline-flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 w-full justify-center min-h-[48px]"
+                onClick={scrollToTop}
               >
                 <span>Join Our Community</span>
                 <Users className="w-5 h-5" />
@@ -511,6 +514,7 @@ const FreeEbook = () => {
               <Link
                 to="/calculator"
                 className="inline-flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300"
+                onClick={scrollToTop}
               >
                 <span>Take Assessment</span>
                 <ArrowRight className="w-5 h-5" />

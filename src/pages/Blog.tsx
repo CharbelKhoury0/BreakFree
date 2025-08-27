@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Calendar, Clock, User, ArrowRight, Filter } from 'lucide-react';
 import NewsletterForm from '../components/NewsletterForm';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -191,6 +192,7 @@ const Blog = () => {
                   <Link
                     to={`/blog/${featuredPost.id}`}
                     className="inline-flex items-center space-x-2 text-white hover:text-gray-200 font-bold"
+                    onClick={scrollToTop}
                   >
                     <span>Read Article</span>
                     <ArrowRight className="w-5 h-5" />
@@ -254,6 +256,7 @@ const Blog = () => {
                   <Link
                     to={`/blog/${post.id}`}
                     className="inline-flex items-center space-x-2 text-white font-semibold text-sm mt-4"
+                    onClick={scrollToTop}
                   >
                     <span>Read more</span>
                     <ArrowRight className="w-4 h-4" />

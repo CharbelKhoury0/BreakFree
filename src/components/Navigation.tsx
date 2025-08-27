@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { scrollToTop } from '../utils/scrollToTop';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,7 +68,7 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2" onClick={scrollToTop}>
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center">
               <span className="text-white font-black text-sm sm:text-base">BF</span>
             </div>
@@ -92,6 +93,7 @@ const Navigation = () => {
                   <Link
                     to={item.path}
                     className="text-gray-300 hover:text-white transition-colors font-semibold"
+                    onClick={scrollToTop}
                   >
                     {item.title}
                   </Link>
@@ -112,6 +114,7 @@ const Navigation = () => {
                           key={dropdownIndex}
                           to={dropdownItem.path}
                           className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                          onClick={scrollToTop}
                         >
                           {dropdownItem.title}
                         </Link>
@@ -128,6 +131,7 @@ const Navigation = () => {
             <Link
               to="/calculator"
               className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 min-h-[44px] flex items-center"
+              onClick={scrollToTop}
             >
               Assessment
             </Link>
@@ -176,6 +180,7 @@ const Navigation = () => {
                               key={dropdownIndex}
                               to={dropdownItem.path}
                               className="block text-gray-400 hover:text-white font-medium py-1"
+                              onClick={scrollToTop}
                             >
                               {dropdownItem.title}
                             </Link>
@@ -187,6 +192,7 @@ const Navigation = () => {
                     <Link
                       to={item.path}
                       className="block text-gray-300 hover:text-white font-semibold py-2"
+                      onClick={scrollToTop}
                     >
                       {item.title}
                     </Link>
@@ -197,6 +203,7 @@ const Navigation = () => {
                 <Link
                   to="/calculator"
                   className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
+                  onClick={scrollToTop}
                 >
                   Assessment
                 </Link>
