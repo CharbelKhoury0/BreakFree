@@ -296,7 +296,9 @@ npm run preview
 
 ### Database Setup
 1. Create Supabase project
-2. Run migrations from `supabase/migrations/`
+2. Go to your Supabase dashboard → SQL Editor
+3. Copy and paste the entire contents of `supabase/migrations/create_complete_system.sql`
+4. Click "Run" to execute the migration
 3. Configure RLS policies
 4. Set up environment variables
 
@@ -304,6 +306,8 @@ npm run preview
 Required environment variables:
 - `VITE_SUPABASE_URL`: Your Supabase project URL
 - `VITE_SUPABASE_ANON_KEY`: Your Supabase anonymous key
+- `VITE_MAILERLITE_API_KEY`: Your MailerLite API key
+- `VITE_MAILERLITE_GROUP_ID`: Your MailerLite group ID
 
 ## Contributing
 
