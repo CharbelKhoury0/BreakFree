@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './components/auth/AuthProvider';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -18,33 +20,46 @@ import Donations from './pages/about/Donations';
 import Privacy from './pages/legal/Privacy';
 import Terms from './pages/legal/Terms';
 import Disclaimer from './pages/legal/Disclaimer';
+import { AuthPage } from './pages/auth/AuthPage';
+import { BlogManagement } from './pages/admin/BlogManagement';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-slate-950">
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/calculator" element={<Calculator />} />
-          <Route path="/programs/mentorship" element={<Mentorship />} />
-          <Route path="/programs/community" element={<Community />} />
-          <Route path="/programs/sessions" element={<RecoverySessions />} />
-          <Route path="/programs/ebooks" element={<Ebooks />} />
-          <Route path="/programs/tools" element={<Tools />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/free-ebook" element={<FreeEbook />} />
-          <Route path="/about/story" element={<MyStory />} />
-          <Route path="/about/testimonials" element={<Testimonials />} />
-          <Route path="/about/certifications" element={<Certifications />} />
-          <Route path="/about/donations" element={<Donations />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-slate-950">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/programs/mentorship" element={<Mentorship />} />
+            <Route path="/programs/community" element={<Community />} />
+            <Route path="/programs/sessions" element={<RecoverySessions />} />
+            <Route path="/programs/ebooks" element={<Ebooks />} />
+            <Route path="/programs/tools" element={<Tools />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/free-ebook" element={<FreeEbook />} />
+            <Route path="/about/story" element={<MyStory />} />
+            <Route path="/about/testimonials" element={<Testimonials />} />
+            <Route path="/about/certifications" element={<Certifications />} />
+            <Route path="/about/donations" element={<Donations />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route 
+              path="/admin/blogs" 
+              element={
+                <ProtectedRoute>
+                  <BlogManagement />
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../hooks/useAuth';
 import { scrollToTop } from '../utils/scrollToTop';
 
 const Navigation = () => {
@@ -9,6 +10,8 @@ const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
+
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,6 +52,28 @@ const Navigation = () => {
         { title: 'Blog', path: '/blog' }
       ]
     },
+    ...(user ? [{
+      title: 'Admin',
+      path: '#',
+      dropdown: [
+        { title: 'Manage Blogs', path: '/admin/blogs' }
+      ]
+    }] : [])
+  ];
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
+  const authMenuItems = user ? [
+    {
+      title: user.email || 'User',
+      path: '#',
+      dropdown: [
+        { title: 'Profile', path: '/profile' },
+        { title: 'Sign Out', path: '#', onClick: handleSignOut }
+      ]
+    },
     {
       title: 'About',
       path: '#',
@@ -59,7 +84,7 @@ const Navigation = () => {
         { title: 'Donations', path: '/about/donations' }
       ]
     }
-  ];
+  ] : [];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -77,7 +102,7 @@ const Navigation = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item, index) => (
+            {[...menuItems, ...authMenuItems].map((item, index) => (
               <div
                 key={index}
                 className="relative"
@@ -112,9 +137,9 @@ const Navigation = () => {
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
                         <Link
                           key={dropdownIndex}
-                          to={dropdownItem.path}
+                          to={dropdownItem.path || '#'}
                           className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
-                          onClick={scrollToTop}
+                          onClick={dropdownItem.onClick || scrollToTop}
                         >
                           {dropdownItem.title}
                         </Link>
@@ -128,13 +153,19 @@ const Navigation = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Link
-              to="/calculator"
-              className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 min-h-[44px] flex items-center"
-              onClick={scrollToTop}
-            >
-              Assessment
-            </Link>
+            {user ? (
+              <div className="text-white font-medium">
+                Welcome back!
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 min-h-[44px] flex items-center"
+                onClick={scrollToTop}
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -158,7 +189,7 @@ const Navigation = () => {
             className="md:hidden bg-slate-950/95 backdrop-blur-sm border-t border-white/5"
           >
             <div className="px-4 py-6 space-y-6">
-              {menuItems.map((item, index) => (
+              {[...menuItems, ...authMenuItems].map((item, index) => (
                 <div key={index}>
                   {item.path === '#' ? (
                     <div>
@@ -178,9 +209,9 @@ const Navigation = () => {
                           {item.dropdown.map((dropdownItem, dropdownIndex) => (
                             <Link
                               key={dropdownIndex}
-                              to={dropdownItem.path}
+                              to={dropdownItem.path || '#'}
                               className="block text-gray-400 hover:text-white font-medium py-1"
-                              onClick={scrollToTop}
+                              onClick={dropdownItem.onClick || scrollToTop}
                             >
                               {dropdownItem.title}
                             </Link>
@@ -200,13 +231,25 @@ const Navigation = () => {
                 </div>
               ))}
               <div className="pt-4 border-t border-white/10">
-                <Link
-                  to="/calculator"
-                  className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
-                  onClick={scrollToTop}
-                >
-                  Assessment
-                </Link>
+                {user ? (
+                  <div className="text-center">
+                    <p className="text-white font-medium mb-4">Welcome back!</p>
+                    <button
+                      onClick={handleSignOut}
+                      className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    to="/auth"
+                    className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
+                    onClick={scrollToTop}
+                  >
+                    Sign In
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
