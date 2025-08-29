@@ -68,25 +68,33 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
     );
   }
 
+  const isSimple = className.includes('newsletter-simple');
+
   return (
-    <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
-      <div className="flex flex-col sm:flex-row gap-4">
+    <form onSubmit={handleSubmit} className={className}>
+      <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
         <div className="flex-1 relative">
-          <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          {!isSimple && <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />}
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={placeholder}
             disabled={status === 'loading'}
-            className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium disabled:opacity-50"
+            className={isSimple 
+              ? "flex-1 px-4 py-2 bg-slate-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 text-sm"
+              : "w-full pl-12 pr-4 py-3 bg-slate-900 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium disabled:opacity-50"
+            }
             required
           />
         </div>
         <button
           type="submit"
           disabled={status === 'loading' || !email}
-          className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 whitespace-nowrap"
+          className={isSimple 
+            ? "bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+            : "border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 whitespace-nowrap"
+          }
         >
           {status === 'loading' ? (
             <>
@@ -103,16 +111,18 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center space-x-2 text-red-400 text-sm"
+          className="flex items-center justify-center space-x-2 text-red-400 text-sm mt-2"
         >
           <AlertCircle className="w-4 h-4" />
           <span>{message}</span>
         </motion.div>
       )}
       
-      <p className="text-gray-400 text-sm font-medium">
-        No spam. Unsubscribe anytime. Your privacy is protected.
-      </p>
+      {!isSimple && (
+        <p className="text-gray-400 text-sm font-medium">
+          No spam. Unsubscribe anytime. Your privacy is protected.
+        </p>
+      )}
     </form>
   );
 };

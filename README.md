@@ -22,6 +22,13 @@ A comprehensive addiction recovery website built with React, TypeScript, and Sup
 - **File Storage**: Secure file uploads and management
 - **Edge Functions**: Serverless functions for custom business logic
 
+### Email Marketing (MailerLite)
+- **Newsletter Subscriptions**: Automated email capture forms
+- **Lead Segmentation**: Custom fields for recovery stage and interests
+- **Free Ebook Delivery**: Automated lead magnets with email delivery
+- **Source Tracking**: Track where subscribers come from
+- **Error Handling**: Graceful handling of duplicates and API errors
+
 ### Blog CMS Features
 - **Rich Content Editor**: Full-featured blog post creation and editing
 - **Draft/Publish Workflow**: Save drafts and publish when ready
@@ -56,15 +63,30 @@ npm install
 3. **Configure environment variables**:
 ```bash
 cp .env.example .env
-# Edit .env with your Supabase credentials
+# Edit .env with your Supabase and MailerLite credentials
 ```
+
+   Required variables:
+   ```env
+   # Supabase
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   
+   # MailerLite (optional - for email subscriptions)
+   VITE_MAILERLITE_API_KEY=your_mailerlite_api_key
+   VITE_MAILERLITE_GROUP_ID=your_default_group_id
+   ```
 
 4. **Run database migrations**:
    - Go to your Supabase dashboard
    - Navigate to SQL Editor
    - Copy and run the SQL from `supabase/migrations/create_blogs_system.sql`
 
-5. **Start the development server**:
+5. **Set up MailerLite (optional)**:
+   - See `MAILERLITE_SETUP.md` for detailed setup instructions
+   - Required for email subscriptions and lead capture
+
+6. **Start the development server**:
 ```bash
 npm run dev
 ```
@@ -154,6 +176,29 @@ BlogService.searchBlogs(query: string, page: number, pageSize: number)
 
 // Get all available tags
 BlogService.getAllTags()
+```
+
+### MailerLite Email Operations
+
+```typescript
+// Subscribe to newsletter
+mailerLiteService.subscribeToNewsletter(email: string, source?: string)
+
+// Subscribe with free ebook capture
+mailerLiteService.subscribeToFreeEbook({
+  firstName: string,
+  email: string,
+  recoveryStage?: string,
+  primaryChallenge?: string
+})
+
+// Subscribe with interest tracking
+mailerLiteService.subscribeWithInterest({
+  email: string,
+  name?: string,
+  interest: string,
+  source: string
+})
 ```
 
 ### Response Format
@@ -260,6 +305,52 @@ const MyComponent = () => {
         <button onClick={handleLogin}>Sign In</button>
       )}
     </div>
+  );
+};
+```
+
+### Email Subscription
+
+```typescript
+import { mailerLiteService } from './services/mailerlite';
+
+const NewsletterSignup = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle');
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    
+    const result = await mailerLiteService.subscribeToNewsletter(
+      email, 
+      'website_footer'
+    );
+    
+    if (result.success) {
+      setStatus('success');
+      setEmail('');
+    } else {
+      setStatus('error');
+      console.error('Subscription failed:', result.message);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubscribe}>
+      <input 
+        type="email" 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        required
+      />
+      <button type="submit" disabled={status === 'loading'}>
+        {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+      </button>
+      {status === 'success' && <p>Successfully subscribed!</p>}
+      {status === 'error' && <p>Subscription failed. Please try again.</p>}
+    </form>
   );
 };
 ```

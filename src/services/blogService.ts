@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { 
   Blog, 
   BlogInsert, 
@@ -20,35 +20,10 @@ export class BlogService {
         return { data: null, error: { message: 'User not authenticated' } };
       }
 
-      // Generate slug if not provided
-      let slug = blogData.slug;
-      if (!slug) {
-        const { data: generatedSlug, error: slugError } = await supabase
-          .rpc('generate_slug', { title: blogData.title });
-        
-        if (slugError) {
-          return { data: null, error: slugError };
-        }
-        slug = generatedSlug;
-      }
-
-      // Check if slug already exists
-      const { data: existingBlog } = await supabase
-        .from('blogs')
-        .select('id')
-        .eq('slug', slug)
-        .single();
-
-      if (existingBlog) {
-        // Append timestamp to make slug unique
-        slug = `${slug}-${Date.now()}`;
-      }
-
       const { data, error } = await supabase
         .from('blogs')
         .insert({
           ...blogData,
-          slug,
           author_id: user.id
         })
         .select()
@@ -95,15 +70,7 @@ export class BlogService {
         return { data: null, error: { message: 'Unauthorized to update this blog' } };
       }
 
-      // Generate new slug if title is being updated
-      if (updates.title && updates.title !== blog.title) {
-        const { data: generatedSlug, error: slugError } = await supabase
-          .rpc('generate_slug', { title: updates.title });
-        
-        if (!slugError && generatedSlug) {
-          updates.slug = generatedSlug;
-        }
-      }
+
 
       const { data, error } = await supabase
         .from('blogs')
@@ -198,39 +165,7 @@ export class BlogService {
     }
   }
 
-  /**
-   * Get a single blog post by slug
-   */
-  static async getBlogBySlug(slug: string, incrementViews = false): Promise<{ data: BlogWithAuthor | null; error: any }> {
-    try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select(`
-          *,
-          profiles (
-            id,
-            full_name,
-            email,
-            avatar_url
-          )
-        `)
-        .eq('slug', slug)
-        .single();
 
-      if (error) {
-        return { data: null, error };
-      }
-
-      // Increment view count if requested and blog is published
-      if (incrementViews && data.published) {
-        await supabase.rpc('increment_blog_views', { blog_id: data.id });
-      }
-
-      return { data: data as BlogWithAuthor, error: null };
-    } catch (error) {
-      return { data: null, error };
-    }
-  }
 
   /**
    * Get paginated list of blogs with filters
@@ -240,6 +175,20 @@ export class BlogService {
     pageSize = 10,
     filters: BlogFilters = {}
   ): Promise<{ data: PaginatedResponse<BlogWithAuthor> | null; error: any }> {
+    if (!isSupabaseConfigured) {
+      // Return empty data when Supabase is not configured
+      const emptyResponse: PaginatedResponse<BlogWithAuthor> = {
+        data: [],
+        count: 0,
+        page,
+        pageSize,
+        totalPages: 0,
+        hasNextPage: false,
+        hasPreviousPage: false
+      };
+      return { data: emptyResponse, error: null };
+    }
+    
     try {
       let query = supabase
         .from('blogs')

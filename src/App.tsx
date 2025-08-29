@@ -22,6 +22,8 @@ import Terms from './pages/legal/Terms';
 import Disclaimer from './pages/legal/Disclaimer';
 import { AuthPage } from './pages/auth/AuthPage';
 import { BlogManagement } from './pages/admin/BlogManagement';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -47,6 +49,23 @@ function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/admin/blogs" 
               element={

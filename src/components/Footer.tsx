@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import NewsletterForm from './NewsletterForm';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -8,9 +9,10 @@ const Footer = () => {
   return (
     <footer className="bg-slate-950 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Footer Links */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
                 <span className="text-white font-black text-sm">BF</span>
@@ -62,26 +64,40 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="text-white font-bold mb-4">Contact</h3>
-            <ul className="space-y-2">
-              <li className="flex items-center space-x-2">
-                <Mail className="w-4 h-4" />
-                <span className="font-medium">support@breakfree.com</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <Phone className="w-4 h-4" />
-                <span className="font-medium">1-800-BREAKFREE</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <span className="font-medium">Available Worldwide</span>
-              </li>
-            </ul>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Mail className="w-4 h-4 text-gray-400" />
+                <span className="font-medium text-sm text-gray-300">support@breakfree.com</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Phone className="w-4 h-4 text-gray-400" />
+                <span className="font-medium text-sm text-gray-300">1-800-BREAKFREE</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <MapPin className="w-4 h-4 text-gray-400" />
+                <span className="font-medium text-sm text-gray-300">Available Worldwide</span>
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Newsletter Section */}
+         <div className="border-t border-white/5 mt-8 pt-8">
+           <div className="text-center mb-6">
+             <h3 className="text-white text-lg font-bold mb-4">Subscribe to our newsletter</h3>
+             <div className="max-w-md mx-auto">
+               <NewsletterForm 
+                 source="footer_newsletter" 
+                 placeholder="Your email address"
+                 buttonText="Subscribe ✈"
+                 className="newsletter-simple"
+               />
+             </div>
+           </div>
+         </div>
+
         {/* Bottom Section */}
-        <div className="border-top: 1px solid transparent" />
-        <div className="border-t border-white/5 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm font-medium">
             © {currentYear} BreakFree. All rights reserved.
           </p>

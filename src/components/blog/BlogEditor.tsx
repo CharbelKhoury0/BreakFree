@@ -15,7 +15,6 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ blog, onSave, onCancel }
     title: '',
     content: '',
     excerpt: '',
-    slug: '',
     published: false,
     featured_image: '',
     tags: [],
@@ -34,7 +33,6 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ blog, onSave, onCancel }
         title: blog.title,
         content: blog.content,
         excerpt: blog.excerpt || '',
-        slug: blog.slug,
         published: blog.published,
         featured_image: blog.featured_image || '',
         tags: blog.tags || [],
@@ -73,21 +71,11 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ blog, onSave, onCancel }
     }));
   };
 
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
     setFormData(prev => ({
       ...prev,
       title,
-      slug: generateSlug(title),
       meta_title: title
     }));
   };
@@ -213,24 +201,6 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({ blog, onSave, onCancel }
                   disabled={loading}
                   className="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium disabled:opacity-50"
                   placeholder="Enter blog title"
-                />
-              </div>
-
-              {/* Slug */}
-              <div>
-                <label htmlFor="slug" className="block text-white font-semibold mb-2">
-                  URL Slug *
-                </label>
-                <input
-                  type="text"
-                  id="slug"
-                  name="slug"
-                  value={formData.slug}
-                  onChange={handleChange}
-                  required
-                  disabled={loading}
-                  className="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/20 font-medium disabled:opacity-50"
-                  placeholder="url-friendly-slug"
                 />
               </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { scrollToTop } from '../utils/scrollToTop';
@@ -11,7 +11,7 @@ const Navigation = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
 
-  const { user, signOut } = useAuth();
+  const { user, profile, isAdmin, signOut, updateProfile } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,29 +51,29 @@ const Navigation = () => {
         { title: 'Free Ebook', path: '/free-ebook' },
         { title: 'Blog', path: '/blog' }
       ]
-    },
-    ...(user ? [{
-      title: 'Admin',
-      path: '#',
-      dropdown: [
-        { title: 'Manage Blogs', path: '/admin/blogs' }
-      ]
-    }] : [])
+    }
   ];
 
   const handleSignOut = async () => {
-    await signOut();
+    try {
+      const { error } = await signOut();
+      if (error) {
+        console.error('Sign out error:', error);
+        // Show user-friendly error message
+        alert('Failed to sign out. Please try again.');
+      } else {
+        // Clear any local state and redirect to home page
+        setIsOpen(false);
+        setActiveDropdown(null);
+        window.location.href = '/';
+      }
+    } catch (error) {
+      console.error('Sign out failed:', error);
+      alert('An unexpected error occurred while signing out.');
+    }
   };
 
-  const authMenuItems = user ? [
-    {
-      title: user.email || 'User',
-      path: '#',
-      dropdown: [
-        { title: 'Profile', path: '/profile' },
-        { title: 'Sign Out', path: '#', onClick: handleSignOut }
-      ]
-    },
+  const authMenuItems = [
     {
       title: 'About',
       path: '#',
@@ -84,7 +84,7 @@ const Navigation = () => {
         { title: 'Donations', path: '/about/donations' }
       ]
     }
-  ] : [];
+  ];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -151,11 +151,69 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* Profile Icon / CTA Button */}
           <div className="hidden md:block">
             {user ? (
-              <div className="text-white font-medium">
-                Welcome back!
+              <div 
+                className="relative"
+                onMouseEnter={() => setActiveDropdown('profile')}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <button className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300">
+                  {profile?.avatar_url ? (
+                    <img 
+                      src={profile.avatar_url} 
+                      alt="Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-5 h-5 text-white" />
+                  )}
+                </button>
+                
+                {/* Profile Dropdown */}
+                <AnimatePresence>
+                  {activeDropdown === 'profile' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full right-0 mt-2 w-56 bg-slate-900/95 rounded-lg shadow-xl border border-white/10 py-2"
+                    >
+                      <div className="px-4 py-2 border-b border-white/10">
+                        <p className="text-white font-semibold text-sm">
+                          {profile?.full_name || user.email}
+                        </p>
+                        <p className="text-gray-400 text-xs">
+                          {isAdmin ? 'Administrator' : 'Member'}
+                        </p>
+                      </div>
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                        onClick={scrollToTop}
+                      >
+                        View Profile
+                      </Link>
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                          onClick={scrollToTop}
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleSignOut}
+                        className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                      >
+                        Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
               <Link
@@ -232,8 +290,49 @@ const Navigation = () => {
               ))}
               <div className="pt-4 border-t border-white/10">
                 {user ? (
-                  <div className="text-center">
-                    <p className="text-white font-medium mb-4">Welcome back!</p>
+                  <div>
+                    {/* Mobile Profile Section */}
+                    <div className="mb-4 p-4 bg-slate-800/50 rounded-lg">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="w-10 h-10 bg-white/10 rounded-full overflow-hidden flex items-center justify-center">
+                          {profile?.avatar_url ? (
+                            <img 
+                              src={profile.avatar_url} 
+                              alt="Profile" 
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <User className="w-5 h-5 text-white" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-white font-semibold text-sm">
+                            {profile?.full_name || user.email}
+                          </p>
+                          <p className="text-gray-400 text-xs">
+                            {isAdmin ? 'Administrator' : 'Member'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Link
+                          to="/profile"
+                          className="block text-gray-300 hover:text-white font-medium py-1 text-sm"
+                          onClick={scrollToTop}
+                        >
+                          View Profile
+                        </Link>
+                        {isAdmin && (
+                          <Link
+                            to="/admin"
+                            className="block text-gray-300 hover:text-white font-medium py-1 text-sm"
+                            onClick={scrollToTop}
+                          >
+                            Admin Dashboard
+                          </Link>
+                        )}
+                      </div>
+                    </div>
                     <button
                       onClick={handleSignOut}
                       className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"

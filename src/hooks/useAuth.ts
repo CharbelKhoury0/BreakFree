@@ -39,11 +39,16 @@ export const useAuthState = () => {
       setSession(session);
       setUser(session?.user ?? null);
 
-      if (session?.user) {
-        const { profile } = await AuthService.getUserProfile();
-        setProfile(profile);
-        setIsAdmin(profile?.role === 'admin');
-      }
+      if (session?.user && session.user.email_confirmed_at) {
+          const { profile, error } = await AuthService.getUserProfile();
+          if (!error && profile) {
+            console.log('Profile loaded successfully:', profile);
+            setProfile(profile);
+            setIsAdmin(profile?.role === 'admin');
+          } else {
+            console.log('Profile loading failed:', error);
+          }
+        }
 
       setLoading(false);
     };
@@ -56,10 +61,19 @@ export const useAuthState = () => {
         setSession(session);
         setUser(session?.user ?? null);
 
-        if (session?.user) {
-          const { profile } = await AuthService.getUserProfile();
-          setProfile(profile);
-          setIsAdmin(profile?.role === 'admin');
+        if (session?.user && session.user.email_confirmed_at) {
+          // Only fetch profile for confirmed users
+          const { profile, error } = await AuthService.getUserProfile();
+          if (!error && profile) {
+            console.log('Profile loaded on auth change:', profile);
+            setProfile(profile);
+            setIsAdmin(profile?.role === 'admin');
+          } else {
+            // Handle profile fetch error gracefully
+            console.log('Profile loading failed on auth change:', error);
+            setProfile(null);
+            setIsAdmin(false);
+          }
         } else {
           setProfile(null);
           setIsAdmin(false);
@@ -84,6 +98,16 @@ export const useAuthState = () => {
 
   const signOut = async () => {
     const { error } = await AuthService.signOut();
+    
+    // Clear local state immediately regardless of error
+    // This ensures UI updates even if there's a network issue
+    if (!error) {
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      setIsAdmin(false);
+    }
+    
     return { error };
   };
 

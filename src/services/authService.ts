@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { User, Session } from '@supabase/supabase-js';
 import type { Profile } from '../types/database';
 
@@ -17,11 +17,15 @@ export class AuthService {
   /**
    * Sign up a new user
    */
-  static async signUp(
-    email: string, 
-    password: string, 
-    fullName?: string
-  ): Promise<AuthResponse> {
+  static async signUp(email: string, password: string, fullName?: string): Promise<AuthResponse> {
+    if (!isSupabaseConfigured) {
+      return {
+        user: null,
+        session: null,
+        error: { message: 'Authentication service not configured. Please set up Supabase environment variables.' }
+      };
+    }
+    
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -32,6 +36,15 @@ export class AuthService {
           }
         }
       });
+
+      // If signup successful and user is confirmed, try to create profile
+      if (!error && data.user && data.user.email_confirmed_at) {
+        try {
+          await this.createProfile(data.user);
+        } catch (profileError) {
+          console.log('Profile creation failed during signup, will retry on login:', profileError);
+        }
+      }
 
       return {
         user: data.user,
@@ -51,12 +64,20 @@ export class AuthService {
    * Sign in an existing user
    */
   static async signIn(email: string, password: string): Promise<AuthResponse> {
+    if (!isSupabaseConfigured) {
+      return {
+        user: null,
+        session: null,
+        error: { message: 'Authentication service not configured. Please set up Supabase environment variables.' }
+      };
+    }
+    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
-
+      
       return {
         user: data.user,
         session: data.session,
@@ -75,6 +96,10 @@ export class AuthService {
    * Sign out the current user
    */
   static async signOut(): Promise<{ error: any }> {
+    if (!isSupabaseConfigured) {
+      return { error: { message: 'Supabase not configured' } };
+    }
+    
     try {
       const { error } = await supabase.auth.signOut();
       return { error };
@@ -108,11 +133,36 @@ export class AuthService {
   }
 
   /**
+   * Create profile for existing user
+   */
+  static async createProfile(user: User): Promise<ProfileResponse> {
+    try {
+      const fullName = user.user_metadata?.full_name || '';
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .insert({
+          id: user.id,
+          email: user.email!,
+          full_name: fullName,
+          role: 'user'
+        })
+        .select()
+        .single();
+
+      return { profile: data, error };
+    } catch (error) {
+      return { profile: null, error };
+    }
+  }
+
+  /**
    * Get user profile
    */
   static async getUserProfile(userId?: string): Promise<ProfileResponse> {
     try {
       let targetUserId = userId;
+      let currentUser = null;
       
       if (!targetUserId) {
         const { user, error: userError } = await this.getCurrentUser();
@@ -120,6 +170,7 @@ export class AuthService {
           return { profile: null, error: userError || { message: 'No user found' } };
         }
         targetUserId = user.id;
+        currentUser = user;
       }
 
       const { data, error } = await supabase
@@ -127,6 +178,12 @@ export class AuthService {
         .select('*')
         .eq('id', targetUserId)
         .single();
+
+      // If profile doesn't exist but user does, create it automatically
+      if (error && error.code === 'PGRST116' && currentUser) {
+        console.log('Profile not found, creating automatically...');
+        return await this.createProfile(currentUser);
+      }
 
       return { profile: data, error };
     } catch (error) {
