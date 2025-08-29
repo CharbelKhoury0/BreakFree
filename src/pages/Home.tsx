@@ -1,13 +1,38 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, Shield, Users, Target, BookOpen, Wrench, Award, TrendingUp, Heart } from 'lucide-react';
 import Hero from '../components/Hero';
 import TestimonialCarousel from '../components/TestimonialCarousel';
+import PageTransitionLoader from '../components/PageTransitionLoader';
 import { programs } from '../data/programs';
+import { usePageTransition } from '../hooks/usePageTransition';
 import { scrollToTop } from '../utils/scrollToTop';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isLoading, startTransition } = usePageTransition();
+
+  // Enhanced navigation handler with loading state and scroll to top
+  const handleNavigation = (path: string) => {
+    return (e: React.MouseEvent) => {
+      e.preventDefault();
+      
+      startTransition();
+      
+      // Navigate with minimal delay to show loading
+      setTimeout(() => {
+        navigate(path);
+      }, 100);
+    };
+  };
+
+  // Scroll to top when location changes (after page loads)
+  React.useEffect(() => {
+    scrollToTop();
+  }, [location.pathname]);
+
   const getIcon = (iconName: string) => {
     const icons = {
       '👥': Users,
@@ -20,8 +45,10 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-slate-950">
-      <Hero />
+    <>
+      <PageTransitionLoader isLoading={isLoading} />
+      <div className="bg-slate-950">
+        <Hero />
 
       {/* Video Section */}
       <section className="py-20 bg-slate-900">
@@ -42,7 +69,7 @@ const Home = () => {
               <Link
                 to="/about/story"
                 className="inline-flex items-center space-x-2 text-white hover:text-gray-200 font-bold text-lg"
-                onClick={scrollToTop}
+                onClick={handleNavigation('/about/story')}
               >
                 <span>Learn more</span>
                 <ArrowRight className="w-5 h-5" />
@@ -132,7 +159,7 @@ const Home = () => {
                     <Link
                       to={program.path}
                       className="inline-flex items-center space-x-2 text-white hover:text-gray-200 transition-colors font-semibold"
-                      onClick={scrollToTop}
+                      onClick={handleNavigation(program.path)}
                     >
                       <span>Learn more</span>
                       <ArrowRight className="w-4 h-4" />
@@ -263,7 +290,7 @@ const Home = () => {
             <Link
               to="/calculator"
               className="inline-flex items-center space-x-2 border border-white/15 hover:border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 min-h-[48px]"
-              onClick={scrollToTop}
+              onClick={handleNavigation('/calculator')}
             >
               <span>Start assessment</span>
               <ArrowRight className="w-5 h-5" />
@@ -271,7 +298,8 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -4,14 +4,12 @@ import { useAuth } from '../hooks/useAuth';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requireAdmin?: boolean;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  requireAdmin = false 
+  children
 }) => {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -23,17 +21,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!user) {
     return <Navigate to="/auth" replace />;
-  }
-
-  if (requireAdmin && !isAdmin) {
-    return (
-      <div className="min-h-screen bg-slate-950 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Access Denied</h2>
-          <p className="text-gray-300">You don't have permission to access this page.</p>
-        </div>
-      </div>
-    );
   }
 
   return <>{children}</>;

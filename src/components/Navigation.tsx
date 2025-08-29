@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
+import { usePageTransition } from '../hooks/usePageTransition';
 import { scrollToTop } from '../utils/scrollToTop';
+import PageTransitionLoader from './PageTransitionLoader';
 
 // Type definitions
 interface DropdownItem {
@@ -23,8 +25,10 @@ const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const { user, profile, isAdmin, signOut, updateProfile } = useAuth();
+  const { user, profile, signOut, updateProfile, isAdmin } = useAuth();
+  const { isLoading, startTransition } = usePageTransition();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +43,34 @@ const Navigation = () => {
     setIsOpen(false);
     setActiveDropdown(null);
   }, [location]);
+
+  // Enhanced navigation handler with loading state and scroll to top
+  const handleNavigation = (path: string, onClick?: () => void) => {
+    return (e: React.MouseEvent) => {
+      e.preventDefault();
+      
+      // Execute any custom onClick handler first
+      if (onClick) {
+        onClick();
+      }
+      
+      // Close mobile menu and dropdowns
+      setIsOpen(false);
+      setActiveDropdown(null);
+      
+      // Start loading transition
+      startTransition();
+      
+      // Navigate with minimal delay to show loading
+      setTimeout(() => {
+        navigate(path);
+        // Scroll to top after navigation
+        setTimeout(() => {
+          scrollToTop();
+        }, 50);
+      }, 100);
+    };
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -69,20 +101,17 @@ const Navigation = () => {
 
   const handleSignOut = async () => {
     try {
-      const { error } = await signOut();
-      if (error) {
-        console.error('Sign out error:', error);
-        // Show user-friendly error message
-        alert('Failed to sign out. Please try again.');
-      } else {
-        // Clear any local state and redirect to home page
-        setIsOpen(false);
-        setActiveDropdown(null);
-        window.location.href = '/';
-      }
+      // Clear UI state immediately for better UX
+      setIsOpen(false);
+      setActiveDropdown(null);
+      
+      // Call signOut - useAuth will handle state clearing and redirect
+      await signOut();
     } catch (error) {
       console.error('Sign out failed:', error);
-      alert('An unexpected error occurred while signing out.');
+      // Clear UI state even on error
+      setIsOpen(false);
+      setActiveDropdown(null);
     }
   };
 
@@ -100,18 +129,20 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-slate-950/90 backdrop-blur-sm border-b border-white/5' : 'bg-transparent'
-    }`}>
+    <>
+      <PageTransitionLoader isLoading={isLoading} />
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-slate-950/90 backdrop-blur-sm border-b border-white/5' : 'bg-transparent'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2" onClick={scrollToTop}>
+          <a href="/" className="flex items-center space-x-2" onClick={handleNavigation('/')}>
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center">
               <span className="text-white font-black text-sm sm:text-base">BF</span>
             </div>
             <span className="text-white font-black text-xl sm:text-2xl tracking-tight">BreakFree</span>
-          </Link>
+          </a>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
@@ -128,13 +159,13 @@ const Navigation = () => {
                     {item.dropdown && <ChevronDown className="w-4 h-4" />}
                   </button>
                 ) : (
-                  <Link
-                    to={item.path}
+                  <a
+                    href={item.path}
                     className="text-gray-300 hover:text-white transition-colors font-semibold"
-                    onClick={scrollToTop}
+                    onClick={handleNavigation(item.path)}
                   >
                     {item.title}
-                  </Link>
+                  </a>
                 )}
 
                 {/* Dropdown Menu */}
@@ -148,14 +179,14 @@ const Navigation = () => {
                       className="absolute top-full left-0 mt-2 w-56 bg-slate-900/95 rounded-lg shadow-xl border border-white/10 py-2"
                     >
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
-                        <Link
+                        <a
                           key={dropdownIndex}
-                          to={dropdownItem.path || '#'}
+                          href={dropdownItem.path || '#'}
                           className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
-                          onClick={dropdownItem.onClick || scrollToTop}
+                          onClick={handleNavigation(dropdownItem.path || '#', dropdownItem.onClick)}
                         >
                           {dropdownItem.title}
-                        </Link>
+                        </a>
                       ))}
                     </motion.div>
                   )}
@@ -199,24 +230,25 @@ const Navigation = () => {
                           {profile?.full_name || user.email}
                         </p>
                         <p className="text-gray-400 text-xs">
-                          {isAdmin ? 'Administrator' : 'Member'}
+                          Member
                         </p>
                       </div>
-                      <Link
-                        to="/profile"
+                      <a
+                        href="/profile"
                         className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
-                        onClick={scrollToTop}
+                        onClick={handleNavigation('/profile')}
                       >
                         View Profile
-                      </Link>
+                      </a>
                       {isAdmin && (
-                        <Link
-                          to="/admin"
+                        <a
+                          href="https://admin.breakfree.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
-                          onClick={scrollToTop}
                         >
                           Admin Dashboard
-                        </Link>
+                        </a>
                       )}
                       <button
                         onClick={handleSignOut}
@@ -229,13 +261,13 @@ const Navigation = () => {
                 </AnimatePresence>
               </div>
             ) : (
-              <Link
-                to="/auth"
+              <a
+                href="/auth"
                 className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 min-h-[44px] flex items-center"
-                onClick={scrollToTop}
+                onClick={handleNavigation('/auth')}
               >
                 Sign In
-              </Link>
+              </a>
             )}
           </div>
 
@@ -278,26 +310,26 @@ const Navigation = () => {
                       {activeDropdown === item.title && item.dropdown && (
                         <div className="mt-3 ml-4 space-y-3">
                           {item.dropdown.map((dropdownItem, dropdownIndex) => (
-                            <Link
+                            <a
                               key={dropdownIndex}
-                              to={dropdownItem.path || '#'}
+                              href={dropdownItem.path || '#'}
                               className="block text-gray-400 hover:text-white font-medium py-1"
-                              onClick={dropdownItem.onClick || scrollToTop}
+                              onClick={handleNavigation(dropdownItem.path || '#', dropdownItem.onClick)}
                             >
                               {dropdownItem.title}
-                            </Link>
+                            </a>
                           ))}
                         </div>
                       )}
                     </div>
                   ) : (
-                    <Link
-                      to={item.path}
+                    <a
+                      href={item.path}
                       className="block text-gray-300 hover:text-white font-semibold py-2"
-                      onClick={scrollToTop}
+                      onClick={handleNavigation(item.path)}
                     >
                       {item.title}
-                    </Link>
+                    </a>
                   )}
                 </div>
               ))}
@@ -323,26 +355,27 @@ const Navigation = () => {
                             {profile?.full_name || user.email}
                           </p>
                           <p className="text-gray-400 text-xs">
-                            {isAdmin ? 'Administrator' : 'Member'}
+                            Member
                           </p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Link
-                          to="/profile"
+                        <a
+                          href="/profile"
                           className="block text-gray-300 hover:text-white font-medium py-1 text-sm"
-                          onClick={scrollToTop}
+                          onClick={handleNavigation('/profile')}
                         >
                           View Profile
-                        </Link>
+                        </a>
                         {isAdmin && (
-                          <Link
-                            to="/admin"
+                          <a
+                            href="https://admin.breakfree.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="block text-gray-300 hover:text-white font-medium py-1 text-sm"
-                            onClick={scrollToTop}
                           >
                             Admin Dashboard
-                          </Link>
+                          </a>
                         )}
                       </div>
                     </div>
@@ -354,13 +387,13 @@ const Navigation = () => {
                     </button>
                   </div>
                 ) : (
-                  <Link
-                    to="/auth"
+                  <a
+                    href="/auth"
                     className="block w-full border border-white/15 hover:border-white/30 text-white px-4 py-4 rounded-lg font-bold text-center min-h-[48px] flex items-center justify-center"
-                    onClick={scrollToTop}
+                    onClick={handleNavigation('/auth')}
                   >
                     Sign In
-                  </Link>
+                  </a>
                 )}
               </div>
             </div>
@@ -368,6 +401,7 @@ const Navigation = () => {
         )}
       </AnimatePresence>
     </nav>
+    </>
   );
 };
 

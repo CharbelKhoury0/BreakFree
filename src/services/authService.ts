@@ -93,6 +93,40 @@ export class AuthService {
   }
 
   /**
+   * Sign in with Google OAuth
+   */
+  static async signInWithGoogle(): Promise<AuthResponse> {
+    if (!isSupabaseConfigured) {
+      return {
+        user: null,
+        session: null,
+        error: { message: 'Authentication service not configured. Please set up Supabase environment variables.' }
+      };
+    }
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      
+      return {
+        user: data.user,
+        session: data.session,
+        error
+      };
+    } catch (error) {
+      return {
+        user: null,
+        session: null,
+        error
+      };
+    }
+  }
+
+  /**
    * Sign out the current user
    */
   static async signOut(): Promise<{ error: any }> {

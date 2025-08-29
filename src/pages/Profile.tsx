@@ -93,8 +93,10 @@ export const Profile: React.FC = () => {
         full_name: formData.full_name
       };
       
-      // Always include avatar_url in update, even if null (for removal)
-      if (removingAvatar || avatarFile) {
+      // Always include avatar_url in update when removing or uploading
+      if (removingAvatar) {
+        updateData.avatar_url = null;
+      } else if (avatarFile) {
         updateData.avatar_url = avatarUrl;
       }
 
@@ -108,6 +110,10 @@ export const Profile: React.FC = () => {
         setAvatarFile(null);
         setAvatarPreview(null);
         setRemovingAvatar(false);
+        // Reset file input after successful save
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
         setTimeout(() => setSuccess(false), 3000);
       }
     } catch (err) {
@@ -155,6 +161,11 @@ export const Profile: React.FC = () => {
     setAvatarFile(null);
     setAvatarPreview(null);
     setError(null);
+    setSuccess(false);
+    // Reset the file input to clear any cached file selection
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   if (!user) {

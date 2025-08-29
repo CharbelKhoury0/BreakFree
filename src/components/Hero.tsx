@@ -6,7 +6,7 @@ import { scrollToTop } from '../utils/scrollToTop';
 
 const Hero = () => {
   return (
-    <section className="relative h-screen w-screen overflow-hidden flex items-center justify-center">
+      <section className="relative h-screen w-screen overflow-hidden flex items-center justify-center">
       {/* Background Image */}
       <div className="absolute inset-0 z-0 w-screen h-screen">
         <div 

@@ -21,9 +21,10 @@ import Privacy from './pages/legal/Privacy';
 import Terms from './pages/legal/Terms';
 import Disclaimer from './pages/legal/Disclaimer';
 import { AuthPage } from './pages/auth/AuthPage';
+import { AuthCallback } from './components/auth/AuthCallback';
 import { BlogManagement } from './pages/admin/BlogManagement';
-import AdminDashboard from './pages/admin/AdminDashboard';
 import Profile from './pages/Profile';
+import Booking from './pages/Booking';
 
 function App() {
   return (
@@ -48,7 +49,9 @@ function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/booking" element={<Booking />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route 
               path="/profile" 
               element={
@@ -58,14 +61,7 @@ function App() {
               } 
             />
 
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute requireAdmin={true}>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } 
-            />
+
             <Route 
               path="/admin/blogs" 
               element={

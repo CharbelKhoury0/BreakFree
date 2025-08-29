@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Calendar, MessageCircle, Target, Shield, ArrowRight, Check, Star } from 'lucide-react';
+import { getButtonConfig } from '../../config/calendly';
 
 const Mentorship = () => {
   const features = [
@@ -77,9 +78,13 @@ const Mentorship = () => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="border border-white/15 hover:border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300">
-                  Schedule Consultation
-                </button>
+                <Link
+                  to="/booking"
+                  className={`${getButtonConfig('primary').className} inline-flex items-center space-x-2`}
+                >
+                  <Calendar className="w-5 h-5" />
+                  <span>{getButtonConfig('primary').text}</span>
+                </Link>
                 <Link
                   to="/calculator"
                   className="border border-white/15 hover:border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 text-center"
@@ -228,9 +233,13 @@ const Mentorship = () => {
               </div>
             </div>
 
-            <button className="w-full border border-white/15 hover:border-white/30 text-white py-4 rounded-lg font-bold text-lg transition-all duration-300">
-              Start your journey
-            </button>
+            <Link
+              to="/booking"
+              className={`${getButtonConfig('pricing').className} inline-flex items-center justify-center space-x-2`}
+            >
+              <Calendar className="w-5 h-5" />
+              <span>{getButtonConfig('pricing').text}</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -296,10 +305,13 @@ const Mentorship = () => {
             <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
               Book a consultation or start with the assessment.
             </p>
-            <button className="border border-white/15 hover:border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 inline-flex items-center space-x-2">
-              <span>Schedule consultation</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
+            <Link
+              to="/booking"
+              className={`${getButtonConfig('cta').className} inline-flex items-center justify-center space-x-2`}
+            >
+              <Calendar className="w-5 h-5" />
+              <span>{getButtonConfig('cta').text}</span>
+            </Link>
           </motion.div>
         </div>
       </section>
