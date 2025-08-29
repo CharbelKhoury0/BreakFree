@@ -5,6 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { scrollToTop } from '../utils/scrollToTop';
 
+// Type definitions
+interface DropdownItem {
+  title: string;
+  path: string;
+  onClick?: () => void;
+}
+
+interface MenuItem {
+  title: string;
+  path: string;
+  dropdown?: DropdownItem[];
+}
+
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +40,7 @@ const Navigation = () => {
     setActiveDropdown(null);
   }, [location]);
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       title: 'Home',
       path: '/'
@@ -73,7 +86,7 @@ const Navigation = () => {
     }
   };
 
-  const authMenuItems = [
+  const authMenuItems: MenuItem[] = [
     {
       title: 'About',
       path: '#',
