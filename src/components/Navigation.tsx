@@ -242,7 +242,7 @@ const Navigation = () => {
                       </a>
                       {isAdmin && (
                         <a
-                          href="https://admin.breakfree.com"
+                          href="https://breakfree-blog-admin-no1o.bolt.host/"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
@@ -369,7 +369,7 @@ const Navigation = () => {
                         </a>
                         {isAdmin && (
                           <a
-                            href="https://admin.breakfree.com"
+                            href="https://breakfree-blog-admin-no1o.bolt.host/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block text-gray-300 hover:text-white font-medium py-1 text-sm"

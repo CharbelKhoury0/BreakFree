@@ -31,7 +31,15 @@ export const useAuthState = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // Initialize isAdmin from localStorage to persist across page refreshes
+  const [isAdmin, setIsAdmin] = useState(() => {
+    try {
+      const stored = localStorage.getItem('breakfree_isAdmin');
+      return stored === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
     let retryCount = 0;
@@ -48,7 +56,14 @@ export const useAuthState = () => {
           if (!error && profile) {
             console.log('Profile loaded successfully:', profile);
             setProfile(profile);
-            setIsAdmin(profile?.role === 'admin');
+            const adminStatus = profile?.role === 'admin';
+            setIsAdmin(adminStatus);
+            // Persist admin status to localStorage
+            try {
+              localStorage.setItem('breakfree_isAdmin', adminStatus.toString());
+            } catch (error) {
+              console.warn('Failed to save admin status to localStorage:', error);
+            }
             return; // Success, exit retry loop
           } else {
             console.log(`Profile loading failed on attempt ${attempt + 1}:`, error);
@@ -58,6 +73,12 @@ export const useAuthState = () => {
               console.log('All profile loading attempts failed, setting defaults');
               setProfile(null);
               setIsAdmin(false);
+              // Clear localStorage on failure
+              try {
+                localStorage.removeItem('breakfree_isAdmin');
+              } catch (error) {
+                console.warn('Failed to clear admin status from localStorage:', error);
+              }
               return;
             }
             
@@ -73,6 +94,12 @@ export const useAuthState = () => {
           if (attempt === maxRetries) {
             setProfile(null);
             setIsAdmin(false);
+            // Clear localStorage on error
+            try {
+              localStorage.removeItem('breakfree_isAdmin');
+            } catch (error) {
+              console.warn('Failed to clear admin status from localStorage:', error);
+            }
             return;
           }
           
@@ -98,6 +125,12 @@ export const useAuthState = () => {
           console.log('No confirmed user found');
           setProfile(null);
           setIsAdmin(false);
+          // Clear localStorage when no user is found
+          try {
+            localStorage.removeItem('breakfree_isAdmin');
+          } catch (error) {
+            console.warn('Failed to clear admin status from localStorage:', error);
+          }
         }
       } catch (error) {
         console.error('Error getting initial session:', error);
@@ -105,6 +138,12 @@ export const useAuthState = () => {
         setUser(null);
         setProfile(null);
         setIsAdmin(false);
+        // Clear localStorage on session error
+        try {
+          localStorage.removeItem('breakfree_isAdmin');
+        } catch (storageError) {
+          console.warn('Failed to clear admin status from localStorage:', storageError);
+        }
       } finally {
         console.log('Initial session loading complete, setting loading to false');
         setLoading(false);
@@ -127,6 +166,12 @@ export const useAuthState = () => {
           console.log('Auth change: No confirmed user, clearing profile');
           setProfile(null);
           setIsAdmin(false);
+          // Clear localStorage when user signs out or session ends
+          try {
+            localStorage.removeItem('breakfree_isAdmin');
+          } catch (error) {
+            console.warn('Failed to clear admin status from localStorage:', error);
+          }
         }
 
         // Always ensure loading is set to false after auth change
@@ -157,31 +202,54 @@ export const useAuthState = () => {
 
   const signOut = async () => {
     try {
-      const { error } = await AuthService.signOut();
+      console.log('Starting sign out process...');
       
-      // Always clear local state regardless of error
-      // This ensures UI updates even if there's a network issue
+      // Clear localStorage first
+      try {
+        localStorage.removeItem('breakfree_isAdmin');
+        console.log('Cleared admin status from localStorage');
+      } catch (error) {
+        console.warn('Failed to clear admin status from localStorage:', error);
+      }
+      
+      // Clear local state immediately for better UX
       setUser(null);
       setSession(null);
       setProfile(null);
       setIsAdmin(false);
+      console.log('Cleared local auth state');
       
-      // Force a page reload to ensure complete state cleanup
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 100);
+      // Call Supabase signOut
+      const { error } = await AuthService.signOut();
+      
+      if (error) {
+        console.error('Supabase signOut error:', error);
+      } else {
+        console.log('Successfully signed out from Supabase');
+      }
+      
+      // Navigate to home page without forcing a reload
+      // The auth state change listener will handle the rest
+      window.history.pushState(null, '', '/');
       
       return { error };
     } catch (error) {
-      // Even if there's an error, clear the state and redirect
+      console.error('Sign out error:', error);
+      
+      // Even if there's an error, clear the state
+      try {
+        localStorage.removeItem('breakfree_isAdmin');
+      } catch (storageError) {
+        console.warn('Failed to clear admin status from localStorage:', storageError);
+      }
+      
       setUser(null);
       setSession(null);
       setProfile(null);
       setIsAdmin(false);
       
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 100);
+      // Navigate to home page
+      window.history.pushState(null, '', '/');
       
       return { error };
     }
@@ -191,7 +259,14 @@ export const useAuthState = () => {
     const { profile: updatedProfile, error } = await AuthService.updateProfile(updates);
     if (!error && updatedProfile) {
       setProfile(updatedProfile);
-      setIsAdmin(updatedProfile.role === 'admin');
+      const adminStatus = updatedProfile.role === 'admin';
+      setIsAdmin(adminStatus);
+      // Update localStorage when profile is updated
+      try {
+        localStorage.setItem('breakfree_isAdmin', adminStatus.toString());
+      } catch (error) {
+        console.warn('Failed to save admin status to localStorage:', error);
+      }
     }
     return { error };
   };
