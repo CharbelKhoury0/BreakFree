@@ -227,18 +227,33 @@ export const BlogList: React.FC<BlogListProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-slate-900 rounded-xl p-6 border border-white/10 hover:border-white/20 transition-colors"
+                className="bg-slate-900 rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition-colors"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <h3 className="text-xl font-bold text-white">{blog.title}</h3>
-                      {!blog.published && (
-                        <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded text-xs font-bold">
-                          Draft
-                        </span>
-                      )}
-                    </div>
+                {/* Featured Image */}
+                {blog.featured_image && (
+                  <div className="aspect-video overflow-hidden">
+                    <img 
+                      src={blog.featured_image} 
+                      alt={blog.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+                
+                <div className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <h3 className="text-xl font-bold text-white">{blog.title}</h3>
+                        {!blog.published && (
+                          <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded text-xs font-bold">
+                            Draft
+                          </span>
+                        )}
+                      </div>
                     
                     {blog.excerpt && (
                       <p className="text-gray-300 mb-4 leading-relaxed font-medium">
@@ -273,26 +288,27 @@ export const BlogList: React.FC<BlogListProps> = ({
                         ))}
                       </div>
                     )}
-                  </div>
-                  
-                  {showActions && (user?.id === blog.author_id || isAdmin) && (
-                    <div className="flex items-center space-x-2 ml-4">
-                      <button
-                        onClick={() => onEdit?.(blog)}
-                        className="p-2 text-gray-400 hover:text-white transition-colors"
-                        title="Edit"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(blog)}
-                        className="p-2 text-gray-400 hover:text-red-400 transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
                     </div>
-                  )}
+                    
+                    {showActions && (user?.id === blog.author_id || isAdmin) && (
+                      <div className="flex items-center space-x-2 ml-4">
+                        <button
+                          onClick={() => onEdit?.(blog)}
+                          className="p-2 text-gray-400 hover:text-white transition-colors"
+                          title="Edit"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(blog)}
+                          className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))

@@ -285,6 +285,59 @@ export class BlogService {
   }
 
   /**
+   * Debug function to get all blog records
+   */
+  static async getAllBlogsDebug(): Promise<{ data: BlogWithAuthor[] | null; error: any }> {
+    try {
+      console.log('🔍 Fetching all blog records from Supabase...');
+      
+      const { data, error } = await supabase
+        .from('blogs')
+        .select(`
+          *,
+          profiles (
+            id,
+            full_name,
+            email,
+            avatar_url,
+            role
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('❌ Error fetching blog records:', error);
+        return { data: null, error };
+      }
+
+      console.log(`📊 Found ${data?.length || 0} blog records:`);
+      
+      if (data && data.length > 0) {
+        data.forEach((blog, index) => {
+          console.log(`\n📝 Blog ${index + 1}:`);
+          console.log(`   ID: ${blog.id}`);
+          console.log(`   Title: ${blog.title}`);
+          console.log(`   Author: ${blog.profiles?.full_name || blog.profiles?.email || 'Unknown'}`);
+          console.log(`   Published: ${blog.published ? '✅ Yes' : '❌ No'}`);
+          console.log(`   Created: ${new Date(blog.created_at).toLocaleDateString()}`);
+          console.log(`   Tags: ${blog.tags?.join(', ') || 'None'}`);
+          console.log(`   Views: ${blog.view_count || 0}`);
+          if (blog.excerpt) {
+            console.log(`   Excerpt: ${blog.excerpt.substring(0, 100)}${blog.excerpt.length > 100 ? '...' : ''}`);
+          }
+        });
+      } else {
+        console.log('📭 No blog records found in the database.');
+      }
+
+      return { data: data as BlogWithAuthor[], error: null };
+    } catch (error) {
+      console.error('💥 Unexpected error:', error);
+      return { data: null, error };
+    }
+  }
+
+  /**
    * Get blog tags (for filtering)
    */
   static async getAllTags(): Promise<{ data: string[] | null; error: any }> {

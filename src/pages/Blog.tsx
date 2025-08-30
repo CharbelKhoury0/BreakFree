@@ -1,89 +1,104 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Calendar, Clock, User, ArrowRight, Filter } from 'lucide-react';
+import { Search, Filter, Calendar, User, Clock, ArrowRight, Tag } from 'lucide-react';
+import { BlogService } from '../services/blogService';
+import type { BlogWithAuthor } from '../types/database';
 import NewsletterForm from '../components/NewsletterForm';
 import { scrollToTop } from '../utils/scrollToTop';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [blogs, setBlogs] = useState<BlogWithAuthor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Clean up function - remove temporary localStorage flag
+  const cleanupTempData = () => {
+    localStorage.removeItem('secondBlogAdded');
+  };
+
+  // Call cleanup on component mount
+  useEffect(() => {
+    cleanupTempData();
+  }, []);
+
+  // Function to fetch blogs from Supabase
+  const fetchBlogs = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const result = await BlogService.getPublishedBlogs(1, 50); // Get up to 50 blogs
+      
+      if (result.error) {
+        setError('Failed to load blog posts');
+        console.error('Error fetching blogs:', result.error);
+      } else if (result.data) {
+        setBlogs(result.data.data);
+        console.log('✅ Loaded blogs from Supabase:', result.data.data);
+      }
+    } catch (error) {
+      setError('Failed to load blog posts');
+      console.error('Unexpected error fetching blogs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch blogs on component mount
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
   const categories = ['All', 'Recovery Tips', 'Success Stories', 'Mental Health', 'Relationships', 'Lifestyle'];
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: 'Breaking the Cycle: 5 Proven Strategies to Overcome Addiction',
-      excerpt: 'Discover evidence-based techniques that have helped thousands of men break free from pornography addiction and reclaim their lives.',
-      category: 'Recovery Tips',
-      date: '2024-01-15',
-      readTime: '8 min read',
-      author: 'Dr. Michael Thompson',
-      image: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg',
-      featured: true
-    },
-    {
-      id: 2,
-      title: 'From Shame to Strength: John\'s 12-Month Recovery Journey',
-      excerpt: 'Follow John\'s transformation from rock bottom to 12 months of freedom, including the challenges and breakthroughs along the way.',
-      category: 'Success Stories',
-      date: '2024-01-12',
-      readTime: '6 min read',
-      author: 'Recovery Team',
-      image: 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg'
-    },
-    {
-      id: 3,
-      title: 'The Science Behind Addiction: Understanding Your Brain',
-      excerpt: 'Learn how addiction affects the brain and why understanding the neuroscience can help you develop more effective recovery strategies.',
-      category: 'Mental Health',
-      date: '2024-01-10',
-      readTime: '10 min read',
-      author: 'Dr. Sarah Wilson',
-      image: 'https://images.pexels.com/photos/3825572/pexels-photo-3825572.jpeg'
-    },
-    {
-      id: 4,
-      title: 'Rebuilding Trust: Healing Relationships After Addiction',
-      excerpt: 'Practical advice for rebuilding trust with your partner and family members as you work through recovery.',
-      category: 'Relationships',
-      date: '2024-01-08',
-      readTime: '7 min read',
-      author: 'Maria Rodriguez, LMFT',
-      image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg'
-    },
-    {
-      id: 5,
-      title: '30-Day Challenge: Building Healthy Daily Habits',
-      excerpt: 'A comprehensive guide to replacing destructive habits with positive ones through our proven 30-day challenge framework.',
-      category: 'Lifestyle',
-      date: '2024-01-05',
-      readTime: '5 min read',
-      author: 'Recovery Team',
-      image: 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg'
-    },
-    {
-      id: 6,
-      title: 'Dealing with Triggers: A Complete Guide',
-      excerpt: 'Identify, understand, and overcome the triggers that lead to relapse with this comprehensive guide to trigger management.',
-      category: 'Recovery Tips',
-      date: '2024-01-03',
-      readTime: '9 min read',
-      author: 'Dr. Michael Thompson',
-      image: 'https://images.pexels.com/photos/5428836/pexels-photo-5428836.jpeg'
-    }
-  ];
+  // Helper function to calculate read time based on content length
+  const calculateReadTime = (content: string) => {
+    const wordsPerMinute = 200;
+    const wordCount = content.split(' ').length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return `${minutes} min read`;
+  };
 
-  const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
+  // Helper function to extract category from tags
+  const getCategoryFromTags = (tags: string[] | null) => {
+    if (!tags || tags.length === 0) return 'General';
+    // Return the first tag that matches our categories, or the first tag
+    const matchingCategory = tags.find(tag => categories.includes(tag));
+    return matchingCategory || tags[0];
+  };
+
+  // Filter blogs based on search and category
+  const filteredPosts = blogs.filter(blog => {
+    const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (blog.excerpt && blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()));
+    const blogCategory = getCategoryFromTags(blog.tags);
+    const matchesCategory = selectedCategory === 'All' || blogCategory === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const featuredPost = blogPosts.find(post => post.featured);
-  const regularPosts = filteredPosts.filter(post => !post.featured || selectedCategory !== 'All' || searchTerm);
+  // For now, treat the first blog as featured (you can add a featured field to the database later)
+  const featuredPost = filteredPosts.length > 0 ? {
+    ...filteredPosts[0],
+    category: getCategoryFromTags(filteredPosts[0].tags),
+    date: filteredPosts[0].created_at,
+    readTime: calculateReadTime(filteredPosts[0].content),
+    author: filteredPosts[0].profiles?.full_name || filteredPosts[0].profiles?.email || 'Unknown Author',
+    image: filteredPosts[0].featured_image || 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg',
+    featured: true
+  } : null;
+
+  // Convert remaining blogs to the expected format
+  const regularPosts = filteredPosts.slice(1).map(blog => ({
+    ...blog,
+    category: getCategoryFromTags(blog.tags),
+    date: blog.created_at,
+    readTime: calculateReadTime(blog.content),
+    author: blog.profiles?.full_name || blog.profiles?.email || 'Unknown Author',
+    image: blog.featured_image || 'https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg'
+  }));
 
   return (
     <div className="min-h-screen bg-slate-950 pt-20">
@@ -207,78 +222,108 @@ const Blog = () => {
       {/* Blog Posts Grid */}
       <section className="py-12 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {regularPosts.map((post, index) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-slate-900 rounded-2xl overflow-hidden border border-white/10"
-              >
-                <div className="aspect-video overflow-hidden">
-                  <div 
-                    className="w-full h-full bg-cover bg-center"
-                    style={{ backgroundImage: `url(${post.image})` }}
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold border border-white/15 text-white/80">
-                      {post.category}
-                    </span>
-                    <div className="flex items-center space-x-2 text-gray-500 text-xs">
-                      <Clock className="w-3 h-3" />
-                      <span>{post.readTime}</span>
-                    </div>
+          {!loading && !error && regularPosts.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {regularPosts.map((post, index) => (
+                <motion.article
+                  key={post.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-slate-900 rounded-2xl overflow-hidden border border-white/10"
+                >
+                  <div className="aspect-video overflow-hidden">
+                    <div 
+                      className="w-full h-full bg-cover bg-center"
+                      style={{ backgroundImage: `url(${post.image})` }}
+                    />
                   </div>
-                  
-                  <h3 className="text-lg sm:text-xl font-black text-white mb-3 leading-tight tracking-tight">
-                    {post.title}
-                  </h3>
-                  
-                  <p className="text-gray-300 text-xs sm:text-sm mb-4 leading-relaxed font-medium">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2 text-gray-400 text-xs">
-                      <User className="w-3 h-3" />
-                      <span>{post.author}</span>
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold border border-white/15 text-white/80">
+                        {post.category}
+                      </span>
+                      <div className="flex items-center space-x-2 text-gray-500 text-xs">
+                        <Clock className="w-3 h-3" />
+                        <span>{post.readTime}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2 text-gray-400 text-xs">
-                      <Calendar className="w-3 h-3" />
-                      <span>{new Date(post.date).toLocaleDateString()}</span>
+                    
+                    <h3 className="text-lg sm:text-xl font-black text-white mb-3 leading-tight tracking-tight">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-gray-300 text-xs sm:text-sm mb-4 leading-relaxed font-medium">
+                      {post.excerpt}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2 text-gray-400 text-xs">
+                        <User className="w-3 h-3" />
+                        <span>{post.author}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-gray-400 text-xs">
+                        <Calendar className="w-3 h-3" />
+                        <span>{new Date(post.date).toLocaleDateString()}</span>
+                      </div>
                     </div>
+                    
+                    <Link
+                      to={`/blog/${post.id}`}
+                      className="inline-flex items-center space-x-2 text-white font-semibold text-sm mt-4"
+                      onClick={scrollToTop}
+                    >
+                      <span>Read more</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
-                  
-                  <Link
-                    to={`/blog/${post.id}`}
-                    className="inline-flex items-center space-x-2 text-white font-semibold text-sm mt-4"
-                    onClick={scrollToTop}
-                  >
-                    <span>Read more</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+                </motion.article>
+              ))}
+            </div>
+          )}
 
-          {filteredPosts.length === 0 && (
+          {loading && (
             <div className="text-center py-16">
-              <h3 className="text-2xl font-black text-gray-400 mb-4">No articles found</h3>
-              <p className="text-gray-500 mb-8 font-medium">Try adjusting your search terms or category filters.</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+              <h3 className="text-xl font-black text-gray-400 mb-2">Loading articles...</h3>
+              <p className="text-gray-500 font-medium">Please wait while we fetch the latest content.</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="text-center py-16">
+              <h3 className="text-2xl font-black text-red-400 mb-4">Error loading articles</h3>
+              <p className="text-gray-500 mb-8 font-medium">{error}</p>
               <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategory('All');
-                }}
+                onClick={fetchBlogs}
                 className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors"
               >
-                Clear filters
+                Try again
               </button>
+            </div>
+          )}
+
+          {!loading && !error && filteredPosts.length === 0 && (
+            <div className="text-center py-16">
+              <h3 className="text-2xl font-black text-gray-400 mb-4">No articles found</h3>
+              <p className="text-gray-500 mb-8 font-medium">
+                {blogs.length === 0 
+                  ? "No blog posts are available yet. Check back soon for new content!"
+                  : "Try adjusting your search terms or category filters."
+                }
+              </p>
+              {blogs.length > 0 && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedCategory('All');
+                  }}
+                  className="border border-white/15 hover:border-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors"
+                >
+                  Clear filters
+                </button>
+              )}
             </div>
           )}
         </div>
