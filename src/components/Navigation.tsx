@@ -239,7 +239,7 @@ const Navigation = () => {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? 'bg-slate-950/90 backdrop-blur-sm border-b border-white/5' : 'bg-transparent'
       }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ml-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
           <a href="/" className="flex items-center space-x-2" onClick={handleNavigation('/')}>
@@ -428,9 +428,10 @@ const Navigation = () => {
                 WebkitOverflowScrolling: 'touch',
                 // Prevent overscroll behavior
                 overscrollBehavior: 'contain',
-                // Ensure proper height
+                // Ensure proper height and prevent content from being cut off
                 height: '100vh',
-                maxHeight: '100vh'
+                maxHeight: '100vh',
+                minHeight: '100vh'
               }}
             >
               {/* Subtle background pattern */}
@@ -439,8 +440,8 @@ const Navigation = () => {
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]"></div>
               </div>
               
-              <div className="relative px-4 pt-16 pb-8 flex-1 flex flex-col justify-between min-h-full">
-              <div className="flex-shrink-0">
+              <div className="relative px-4 pt-16 pb-4 flex-1 flex flex-col justify-between min-h-full">
+              <div className="flex-shrink-0 space-y-2">
                 {[...menuItems, ...authMenuItems].map((item, index) => (
                   <div key={index}>
                     {item.path === '#' ? (
@@ -493,12 +494,12 @@ const Navigation = () => {
                   </div>
                 ))}
               </div>
-              <div className="flex-shrink-0 mt-auto pt-4">
-                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4"></div>
+              <div className="flex-shrink-0 mt-auto pt-2">
+                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-3"></div>
                 {user ? (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {/* Mobile Profile Section */}
-                    <div className="p-3 bg-gradient-to-br from-white/10 via-white/5 to-transparent rounded-xl border border-white/10 shadow-xl backdrop-blur-sm">
+                    <div className="p-2 bg-gradient-to-br from-white/10 via-white/5 to-transparent rounded-xl border border-white/10 shadow-xl backdrop-blur-sm">
                       <div className="flex items-center space-x-2 mb-2">
                         <div className="relative">
                           <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full overflow-hidden flex items-center justify-center border-2 border-white/20 shadow-lg">
@@ -523,7 +524,7 @@ const Navigation = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-0.5">
                         <a
                           href="/profile"
                           className="flex items-center text-gray-200 hover:text-white font-medium py-1.5 px-2 rounded-lg hover:bg-white/10 transition-all duration-300 text-xs min-h-[32px] group"

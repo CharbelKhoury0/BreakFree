@@ -24,6 +24,10 @@ const Home = () => {
       // Navigate with minimal delay to show loading
       setTimeout(() => {
         navigate(path);
+        // Scroll to top after navigation
+        setTimeout(() => {
+          scrollToTop();
+        }, 50);
       }, 100);
     };
   };

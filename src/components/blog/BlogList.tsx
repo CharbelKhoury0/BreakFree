@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Search, Filter, Calendar, User, Eye, Edit, Trash2, Plus } from 'lucide-react';
 import { BlogService } from '../../services/blogService';
 import { useAuth } from '../../hooks/useAuth';
+import { scrollToTop } from '../../utils/scrollToTop';
 import type { BlogWithAuthor, PaginatedResponse } from '../../types/database';
 
 interface BlogListProps {
@@ -82,6 +83,13 @@ export const BlogList: React.FC<BlogListProps> = ({
   useEffect(() => {
     loadTags();
   }, []);
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    if (currentPage > 1) {
+      scrollToTop();
+    }
+  }, [currentPage]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

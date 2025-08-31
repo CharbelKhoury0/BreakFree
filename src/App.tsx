@@ -1,38 +1,64 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './components/auth/AuthProvider';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Calculator from './pages/Calculator';
-import Mentorship from './pages/programs/Mentorship';
-import Community from './pages/programs/Community';
-import RecoverySessions from './pages/programs/RecoverySessions';
-import Ebooks from './pages/programs/Ebooks';
-import Tools from './pages/programs/Tools';
-import Blog from './pages/Blog';
-import FreeEbook from './pages/FreeEbook';
-import MyStory from './pages/about/MyStory';
-import Testimonials from './pages/about/Testimonials';
-import Certifications from './pages/about/Certifications';
-import Donations from './pages/about/Donations';
-import Privacy from './pages/legal/Privacy';
-import Terms from './pages/legal/Terms';
-import Disclaimer from './pages/legal/Disclaimer';
-import { AuthPage } from './pages/auth/AuthPage';
-import { AuthCallback } from './components/auth/AuthCallback';
-import { BlogManagement } from './pages/admin/BlogManagement';
-import Profile from './pages/Profile';
-import Booking from './pages/Booking';
+import PageTransitionLoader from './components/PageTransitionLoader';
+
+// Lazy load all pages for code splitting
+const Home = React.lazy(() => import('./pages/Home'));
+const Calculator = React.lazy(() => import('./pages/Calculator'));
+const Mentorship = React.lazy(() => import('./pages/programs/Mentorship'));
+const Community = React.lazy(() => import('./pages/programs/Community'));
+const RecoverySessions = React.lazy(() => import('./pages/programs/RecoverySessions'));
+const Ebooks = React.lazy(() => import('./pages/programs/Ebooks'));
+const Tools = React.lazy(() => import('./pages/programs/Tools'));
+const Blog = React.lazy(() => import('./pages/Blog'));
+const FreeEbook = React.lazy(() => import('./pages/FreeEbook'));
+const MyStory = React.lazy(() => import('./pages/about/MyStory'));
+const Testimonials = React.lazy(() => import('./pages/about/Testimonials'));
+const Certifications = React.lazy(() => import('./pages/about/Certifications'));
+const Donations = React.lazy(() => import('./pages/about/Donations'));
+const Privacy = React.lazy(() => import('./pages/legal/Privacy'));
+const Terms = React.lazy(() => import('./pages/legal/Terms'));
+const Disclaimer = React.lazy(() => import('./pages/legal/Disclaimer'));
+const AuthPage = React.lazy(() => import('./pages/auth/AuthPage').then(module => ({ default: module.AuthPage })));
+const AuthCallback = React.lazy(() => import('./components/auth/AuthCallback').then(module => ({ default: module.AuthCallback })));
+const BlogManagement = React.lazy(() => import('./pages/admin/BlogManagement').then(module => ({ default: module.BlogManagement })));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const Booking = React.lazy(() => import('./pages/Booking'));
+
+// Global ScrollToTop component
+const ScrollToTop = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 300);
+  }, [location.pathname]);
+  
+  return null;
+};
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <div className="min-h-screen bg-slate-950">
           <Navigation />
-          <Routes>
+          <Suspense fallback={
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+              <PageTransitionLoader isLoading={true} />
+            </div>
+          }>
+            <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/programs/mentorship" element={<Mentorship />} />
@@ -70,7 +96,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-          </Routes>
+            </Routes>
+          </Suspense>
           <Footer />
         </div>
       </Router>

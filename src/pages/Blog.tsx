@@ -52,6 +52,13 @@ const Blog = () => {
     fetchBlogs();
   }, []);
 
+  // Scroll to top when search term or category changes
+  useEffect(() => {
+    if (searchTerm || selectedCategory !== 'All') {
+      scrollToTop();
+    }
+  }, [searchTerm, selectedCategory]);
+
   const categories = ['All', 'Recovery Tips', 'Success Stories', 'Mental Health', 'Relationships', 'Lifestyle'];
 
   // Helper function to calculate read time based on content length
