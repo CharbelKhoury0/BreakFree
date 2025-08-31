@@ -127,7 +127,7 @@ export class AuthService {
   }
 
   /**
-   * Sign out the current user
+   * Sign out the current user with comprehensive session clearing
    */
   static async signOut(): Promise<{ error: any }> {
     if (!isSupabaseConfigured) {
@@ -135,9 +135,68 @@ export class AuthService {
     }
     
     try {
-      const { error } = await supabase.auth.signOut();
+      console.log('AuthService: Starting comprehensive sign out...');
+      
+      // Force sign out with scope 'global' to clear all sessions
+      const { error } = await supabase.auth.signOut({ scope: 'global' });
+      
+      // Clear all possible localStorage keys related to Supabase
+      try {
+        const keysToRemove = [
+          'supabase.auth.token',
+          'sb-auth-token',
+          'breakfree_isAdmin',
+          'breakfree_explicit_login'
+        ];
+        
+        // Clear specific keys
+        keysToRemove.forEach(key => {
+          localStorage.removeItem(key);
+        });
+        
+        // Clear any Supabase-related keys that might exist
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith('supabase') || key.startsWith('sb-')) {
+            localStorage.removeItem(key);
+          }
+        });
+        
+        console.log('AuthService: Cleared all localStorage auth data');
+      } catch (storageError) {
+        console.warn('AuthService: Failed to clear localStorage:', storageError);
+      }
+      
+      // Clear sessionStorage as well
+      try {
+        Object.keys(sessionStorage).forEach(key => {
+          if (key.startsWith('supabase') || key.startsWith('sb-') || key.includes('auth')) {
+            sessionStorage.removeItem(key);
+          }
+        });
+        console.log('AuthService: Cleared sessionStorage auth data');
+      } catch (storageError) {
+        console.warn('AuthService: Failed to clear sessionStorage:', storageError);
+      }
+      
+      if (error) {
+        console.error('AuthService: Supabase signOut error:', error);
+      } else {
+        console.log('AuthService: Successfully signed out from Supabase');
+      }
+      
       return { error };
     } catch (error) {
+      console.error('AuthService: Sign out error:', error);
+      
+      // Even if there's an error, try to clear storage
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+        console.log('AuthService: Force cleared all storage due to error');
+      } catch (clearError) {
+        console.warn('AuthService: Failed to force clear storage:', clearError);
+      }
+      
       return { error };
     }
   }

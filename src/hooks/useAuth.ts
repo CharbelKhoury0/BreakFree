@@ -41,6 +41,48 @@ export const useAuthState = () => {
     }
   });
 
+  // Helper function to check if session is from explicit login
+  const isExplicitLogin = () => {
+    try {
+      return localStorage.getItem('breakfree_explicit_login') === 'true';
+    } catch {
+      return false;
+    }
+  };
+
+  // Helper function to set explicit login flag
+  const setExplicitLogin = (value: boolean) => {
+    try {
+      if (value) {
+        localStorage.setItem('breakfree_explicit_login', 'true');
+      } else {
+        localStorage.removeItem('breakfree_explicit_login');
+      }
+    } catch (error) {
+      console.warn('Failed to manage explicit login flag:', error);
+    }
+  };
+
+  // Helper function to validate session
+  const isValidSession = (session: Session | null): boolean => {
+    if (!session) return false;
+    
+    // Check if session is expired
+    const now = Math.floor(Date.now() / 1000);
+    if (session.expires_at && session.expires_at < now) {
+      console.log('Session expired');
+      return false;
+    }
+    
+    // Check if user email is confirmed
+    if (!session.user?.email_confirmed_at) {
+      console.log('User email not confirmed');
+      return false;
+    }
+    
+    return true;
+  };
+
   useEffect(() => {
     let retryCount = 0;
     const maxRetries = 3;
@@ -115,17 +157,44 @@ export const useAuthState = () => {
       try {
         console.log('Getting initial session...');
         const { session } = await AuthService.getCurrentSession();
-        setSession(session);
-        setUser(session?.user ?? null);
-
-        if (session?.user && session.user.email_confirmed_at) {
-          console.log('User found, loading profile...');
+        
+        // Check if session is valid and from explicit login
+        const hasExplicitLogin = isExplicitLogin();
+        const sessionValid = isValidSession(session);
+        
+        console.log('Session validation:', {
+          hasSession: !!session,
+          hasExplicitLogin,
+          sessionValid,
+          userId: session?.user?.id
+        });
+        
+        // Only restore session if it's from explicit login and valid
+        if (session && sessionValid && hasExplicitLogin) {
+          console.log('Valid explicit session found, restoring user...');
+          setSession(session);
+          setUser(session.user);
           await loadProfileWithRetry(session.user);
         } else {
-          console.log('No confirmed user found');
+          // Clear any invalid or non-explicit sessions
+          if (session && !hasExplicitLogin) {
+            console.log('Found persisted session without explicit login, clearing...');
+            await AuthService.signOut();
+          } else if (session && !sessionValid) {
+            console.log('Found invalid session, clearing...');
+            await AuthService.signOut();
+          } else {
+            console.log('No valid session found');
+          }
+          
+          // Clear all auth state
+          setSession(null);
+          setUser(null);
           setProfile(null);
           setIsAdmin(false);
-          // Clear localStorage when no user is found
+          setExplicitLogin(false);
+          
+          // Clear localStorage
           try {
             localStorage.removeItem('breakfree_isAdmin');
           } catch (error) {
@@ -134,10 +203,14 @@ export const useAuthState = () => {
         }
       } catch (error) {
         console.error('Error getting initial session:', error);
+        
+        // Clear all state on error
         setSession(null);
         setUser(null);
         setProfile(null);
         setIsAdmin(false);
+        setExplicitLogin(false);
+        
         // Clear localStorage on session error
         try {
           localStorage.removeItem('breakfree_isAdmin');
@@ -156,21 +229,95 @@ export const useAuthState = () => {
     const { data: { subscription } } = AuthService.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
-        setSession(session);
-        setUser(session?.user ?? null);
-
-        if (session?.user && session.user.email_confirmed_at) {
-          console.log('Auth change: User confirmed, loading profile...');
-          await loadProfileWithRetry(session.user);
-        } else {
-          console.log('Auth change: No confirmed user, clearing profile');
+        
+        // Handle different auth events
+        if (event === 'SIGNED_OUT') {
+          console.log('User signed out, performing comprehensive cleanup');
+          
+          // Clear all local state immediately
+          setSession(null);
+          setUser(null);
           setProfile(null);
           setIsAdmin(false);
-          // Clear localStorage when user signs out or session ends
+          setExplicitLogin(false);
+          
+          // Clear all auth-related localStorage
           try {
-            localStorage.removeItem('breakfree_isAdmin');
+            const authKeys = [
+              'breakfree_isAdmin',
+              'breakfree_explicit_login',
+              'supabase.auth.token',
+              'sb-auth-token'
+            ];
+            
+            authKeys.forEach(key => {
+              localStorage.removeItem(key);
+            });
+            
+            // Clear any remaining Supabase or auth-related keys
+            Object.keys(localStorage).forEach(key => {
+              if (key.startsWith('supabase') || key.startsWith('sb-') || key.includes('breakfree') || key.includes('auth')) {
+                localStorage.removeItem(key);
+              }
+            });
+            
+            console.log('SIGNED_OUT: Cleared all localStorage auth data');
           } catch (error) {
-            console.warn('Failed to clear admin status from localStorage:', error);
+            console.warn('SIGNED_OUT: Failed to clear localStorage:', error);
+          }
+          
+          // Clear sessionStorage as well
+          try {
+            Object.keys(sessionStorage).forEach(key => {
+              if (key.startsWith('supabase') || key.startsWith('sb-') || key.includes('auth') || key.includes('breakfree')) {
+                sessionStorage.removeItem(key);
+              }
+            });
+            console.log('SIGNED_OUT: Cleared sessionStorage auth data');
+          } catch (error) {
+            console.warn('SIGNED_OUT: Failed to clear sessionStorage:', error);
+          }
+        } else if (event === 'SIGNED_IN' && session?.user) {
+          console.log('User signed in explicitly, setting session');
+          setExplicitLogin(true);
+          setSession(session);
+          setUser(session.user);
+          
+          if (session.user.email_confirmed_at) {
+            await loadProfileWithRetry(session.user);
+          }
+        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          // Only update if we already have an explicit login
+          if (isExplicitLogin()) {
+            console.log('Token refreshed for explicit session');
+            setSession(session);
+            setUser(session.user);
+          } else {
+            console.log('Token refreshed but no explicit login, ignoring');
+          }
+        } else {
+          // For other events, only proceed if we have explicit login
+          if (session?.user && session.user.email_confirmed_at && isExplicitLogin()) {
+            console.log('Auth change: User confirmed with explicit login, loading profile...');
+            setSession(session);
+            setUser(session.user);
+            await loadProfileWithRetry(session.user);
+          } else {
+            console.log('Auth change: No confirmed user or explicit login, clearing profile');
+            setSession(null);
+            setUser(null);
+            setProfile(null);
+            setIsAdmin(false);
+            
+            if (!isExplicitLogin()) {
+              setExplicitLogin(false);
+            }
+            
+            try {
+              localStorage.removeItem('breakfree_isAdmin');
+            } catch (error) {
+              console.warn('Failed to clear admin status from localStorage:', error);
+            }
           }
         }
 
@@ -186,70 +333,136 @@ export const useAuthState = () => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await AuthService.signIn(email, password);
-    return { error };
+    try {
+      console.log('Attempting sign in...');
+      const { error } = await AuthService.signIn(email, password);
+      
+      if (!error) {
+        console.log('Sign in successful, setting explicit login flag');
+        setExplicitLogin(true);
+      }
+      
+      return { error };
+    } catch (error) {
+      console.error('Sign in error:', error);
+      return { error };
+    }
   };
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const { error } = await AuthService.signUp(email, password, fullName);
-    return { error };
+    try {
+      console.log('Attempting sign up...');
+      const { error } = await AuthService.signUp(email, password, fullName);
+      
+      if (!error) {
+        console.log('Sign up successful, setting explicit login flag');
+        setExplicitLogin(true);
+      }
+      
+      return { error };
+    } catch (error) {
+      console.error('Sign up error:', error);
+      return { error };
+    }
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await AuthService.signInWithGoogle();
-    return { error };
+    try {
+      console.log('Attempting Google sign in...');
+      const { error } = await AuthService.signInWithGoogle();
+      
+      if (!error) {
+        console.log('Google sign in successful, setting explicit login flag');
+        setExplicitLogin(true);
+      }
+      
+      return { error };
+    } catch (error) {
+      console.error('Google sign in error:', error);
+      return { error };
+    }
   };
 
   const signOut = async () => {
     try {
-      console.log('Starting sign out process...');
-      
-      // Clear localStorage first
-      try {
-        localStorage.removeItem('breakfree_isAdmin');
-        console.log('Cleared admin status from localStorage');
-      } catch (error) {
-        console.warn('Failed to clear admin status from localStorage:', error);
-      }
+      console.log('useAuth: Starting comprehensive sign out process...');
       
       // Clear local state immediately for better UX
       setUser(null);
       setSession(null);
       setProfile(null);
       setIsAdmin(false);
-      console.log('Cleared local auth state');
+      console.log('useAuth: Cleared local auth state');
       
-      // Call Supabase signOut
+      // Clear explicit login flag
+      setExplicitLogin(false);
+      console.log('useAuth: Cleared explicit login flag');
+      
+      // Clear all localStorage auth-related data
+      try {
+        const authKeys = [
+          'breakfree_isAdmin',
+          'breakfree_explicit_login',
+          'supabase.auth.token',
+          'sb-auth-token'
+        ];
+        
+        authKeys.forEach(key => {
+          localStorage.removeItem(key);
+        });
+        
+        // Clear any remaining Supabase keys
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith('supabase') || key.startsWith('sb-') || key.includes('breakfree')) {
+            localStorage.removeItem(key);
+          }
+        });
+        
+        console.log('useAuth: Cleared all localStorage auth data');
+      } catch (error) {
+        console.warn('useAuth: Failed to clear localStorage:', error);
+      }
+      
+      // Call enhanced AuthService signOut (which includes global scope and storage clearing)
       const { error } = await AuthService.signOut();
       
       if (error) {
-        console.error('Supabase signOut error:', error);
+        console.error('useAuth: AuthService signOut error:', error);
       } else {
-        console.log('Successfully signed out from Supabase');
+        console.log('useAuth: Successfully signed out from AuthService');
       }
       
-      // Navigate to home page without forcing a reload
-      // The auth state change listener will handle the rest
-      window.history.pushState(null, '', '/');
+      // Force a complete page reload to ensure all state is cleared
+      // This ensures no residual state remains in memory
+      console.log('useAuth: Forcing page reload to ensure complete logout');
+      window.location.href = '/login';
       
       return { error };
     } catch (error) {
-      console.error('Sign out error:', error);
+      console.error('useAuth: Sign out error:', error);
       
-      // Even if there's an error, clear the state
+      // Even if there's an error, force clear everything
       try {
-        localStorage.removeItem('breakfree_isAdmin');
+        // Clear all localStorage
+        localStorage.clear();
+        // Clear all sessionStorage
+        sessionStorage.clear();
+        console.log('useAuth: Force cleared all storage due to error');
       } catch (storageError) {
-        console.warn('Failed to clear admin status from localStorage:', storageError);
+        console.warn('useAuth: Failed to force clear storage:', storageError);
       }
       
+      // Clear explicit login flag
+      setExplicitLogin(false);
+      
+      // Clear local state
       setUser(null);
       setSession(null);
       setProfile(null);
       setIsAdmin(false);
       
-      // Navigate to home page
-      window.history.pushState(null, '', '/');
+      // Force redirect to login page
+      window.location.href = '/login';
       
       return { error };
     }
