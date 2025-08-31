@@ -45,6 +45,35 @@ const Navigation = () => {
     setActiveDropdown(null);
   }, [location]);
 
+  // Scroll lock effect for mobile menu
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent scrolling on body when menu is open
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${window.scrollY}px`;
+      document.body.style.width = '100%';
+    } else {
+      // Restore scrolling when menu is closed
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    };
+  }, [isOpen]);
+
   // Enhanced navigation handler with loading state and scroll to top
   const handleNavigation = (path: string, onClick?: () => void) => {
     return (e: React.MouseEvent) => {
@@ -111,11 +140,22 @@ const Navigation = () => {
       
       // Call signOut - useAuth will handle state clearing and redirect
       await signOut();
+      
+      // Scroll to top and refresh page for clean state
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (error) {
       console.error('Sign out failed:', error);
       // Clear UI state even on error
       setIsOpen(false);
       setActiveDropdown(null);
+      // Even on error, scroll to top and refresh
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }
   };
 
@@ -295,75 +335,87 @@ const Navigation = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="md:hidden fixed inset-0 top-16 sm:top-20 z-40 bg-gradient-to-br from-slate-950/98 via-slate-900/96 to-slate-950/98 backdrop-blur-xl border-t border-white/10 shadow-2xl overflow-hidden"
+            className="md:hidden fixed inset-0 z-50 bg-gradient-to-br from-slate-950/98 via-slate-900/96 to-slate-950/98 backdrop-blur-xl shadow-2xl overflow-hidden"
           >
-            <div className="h-full overflow-y-auto relative">
+            {/* Close button */}
+            <div className="absolute top-3 right-3 z-10">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-white p-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/15 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 shadow-md"
+                aria-label="Close mobile menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="max-h-screen overflow-hidden relative flex flex-col">
               {/* Subtle background pattern */}
               <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10"></div>
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]"></div>
               </div>
-              <div className="relative px-6 py-8 space-y-8 min-h-full">
-              {[...menuItems, ...authMenuItems].map((item, index) => (
-                <div key={index}>
-                  {item.path === '#' ? (
-                    <div>
-                      <button
-                        onClick={() => setActiveDropdown(
-                          activeDropdown === item.title ? null : item.title
-                        )}
-                        className="flex items-center justify-between w-full text-gray-200 hover:text-white font-bold text-lg py-4 px-4 rounded-xl hover:bg-white/5 transition-all duration-300 group min-h-[56px]"
-                      >
-                        <div className="flex items-center space-x-3">
-                          {item.icon && <item.icon className="w-6 h-6 text-gray-400 group-hover:text-blue-400 transition-colors" />}
-                          <span className="tracking-wide">{item.title}</span>
-                        </div>
-                        <ChevronDown className={`w-5 h-5 transition-all duration-300 group-hover:scale-110 ${
-                          activeDropdown === item.title ? 'rotate-180 text-blue-400' : 'text-gray-400'
-                        }`} />
-                      </button>
-                      {activeDropdown === item.title && item.dropdown && (
-                        <motion.div 
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3, ease: 'easeInOut' }}
-                          className="mt-2 ml-2 space-y-2 bg-white/5 rounded-xl p-3 border border-white/10"
+              <div className="relative px-4 pt-16 pb-4 space-y-3 flex-1 flex flex-col justify-between">
+              <div className="flex-shrink-0">
+                {[...menuItems, ...authMenuItems].map((item, index) => (
+                  <div key={index}>
+                    {item.path === '#' ? (
+                      <div>
+                        <button
+                          onClick={() => setActiveDropdown(
+                            activeDropdown === item.title ? null : item.title
+                          )}
+                          className="flex items-center justify-between w-full text-gray-200 hover:text-white font-medium text-sm py-2 px-3 rounded-lg hover:bg-white/5 transition-all duration-300 group min-h-[40px]"
                         >
-                          {item.dropdown.map((dropdownItem, dropdownIndex) => (
-                            <a
-                              key={dropdownIndex}
-                              href={dropdownItem.path || '#'}
-                              className="block text-gray-300 hover:text-white font-medium py-3 px-4 rounded-lg hover:bg-white/10 transition-all duration-300 text-base min-h-[48px] flex items-center"
-                              onClick={handleNavigation(dropdownItem.path || '#', dropdownItem.onClick)}
-                            >
-                              {dropdownItem.title}
-                            </a>
-                          ))}
-                        </motion.div>
-                      )}
-                    </div>
-                  ) : (
-                    <a
-                      href={item.path}
-                      className="text-gray-200 hover:text-white font-bold text-lg py-4 px-4 rounded-xl hover:bg-white/5 transition-all duration-300 min-h-[56px] flex items-center space-x-3 group"
-                      onClick={handleNavigation(item.path)}
-                    >
-                      {item.icon && <item.icon className="w-6 h-6 text-gray-400 group-hover:text-blue-400 transition-colors" />}
-                      <span className="tracking-wide">{item.title}</span>
-                    </a>
-                  )}
-                </div>
-              ))}
-              <div className="pt-6 mt-6">
-                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6"></div>
+                          <div className="flex items-center space-x-2">
+                            {item.icon && <item.icon className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />}
+                            <span>{item.title}</span>
+                          </div>
+                          <ChevronDown className={`w-3 h-3 transition-all duration-300 group-hover:scale-110 ${
+                            activeDropdown === item.title ? 'rotate-180 text-blue-400' : 'text-gray-400'
+                          }`} />
+                        </button>
+                        {activeDropdown === item.title && item.dropdown && (
+                          <motion.div 
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2, ease: 'easeInOut' }}
+                            className="mt-1 ml-1 space-y-1 bg-white/5 rounded-lg p-2 border border-white/10"
+                          >
+                            {item.dropdown.map((dropdownItem, dropdownIndex) => (
+                              <a
+                                key={dropdownIndex}
+                                href={dropdownItem.path || '#'}
+                                className="block text-gray-300 hover:text-white font-medium py-2 px-2 rounded-md hover:bg-white/10 transition-all duration-300 text-xs min-h-[36px] flex items-center"
+                                onClick={handleNavigation(dropdownItem.path || '#', dropdownItem.onClick)}
+                              >
+                                {dropdownItem.title}
+                              </a>
+                            ))}
+                          </motion.div>
+                        )}
+                      </div>
+                    ) : (
+                      <a
+                        href={item.path}
+                        className="text-gray-200 hover:text-white font-medium text-sm py-2 px-3 rounded-lg hover:bg-white/5 transition-all duration-300 min-h-[40px] flex items-center space-x-2 group"
+                        onClick={handleNavigation(item.path)}
+                      >
+                        {item.icon && <item.icon className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />}
+                        <span>{item.title}</span>
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex-shrink-0 mt-auto">
+                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4"></div>
                 {user ? (
-                  <div>
+                  <div className="space-y-3">
                     {/* Mobile Profile Section */}
-                    <div className="mb-6 p-6 bg-gradient-to-br from-white/10 via-white/5 to-transparent rounded-2xl border border-white/10 shadow-xl backdrop-blur-sm">
-                      <div className="flex items-center space-x-4 mb-4">
+                    <div className="p-3 bg-gradient-to-br from-white/10 via-white/5 to-transparent rounded-xl border border-white/10 shadow-xl backdrop-blur-sm">
+                      <div className="flex items-center space-x-2 mb-2">
                         <div className="relative">
-                          <div className="w-14 h-14 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full overflow-hidden flex items-center justify-center border-2 border-white/20 shadow-lg">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full overflow-hidden flex items-center justify-center border-2 border-white/20 shadow-lg">
                             {profile?.avatar_url ? (
                               <img 
                                 src={profile.avatar_url} 
@@ -371,27 +423,27 @@ const Navigation = () => {
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <User className="w-7 h-7 text-white" />
+                              <User className="w-5 h-5 text-white" />
                             )}
                           </div>
-                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-900 shadow-sm"></div>
+                          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-slate-900 shadow-sm"></div>
                         </div>
                         <div className="flex-1">
-                          <p className="text-white font-bold text-base leading-tight">
+                          <p className="text-white font-medium text-xs leading-tight">
                             {profile?.full_name || user.email}
                           </p>
-                          <p className="text-blue-300 text-sm font-medium mt-1">
-                            Premium Member
+                          <p className="text-blue-300 text-xs font-medium">
+                            Member
                           </p>
                         </div>
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-1">
                         <a
                           href="/profile"
-                          className="flex items-center text-gray-200 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all duration-300 text-base min-h-[48px] group"
+                          className="flex items-center text-gray-200 hover:text-white font-medium py-1.5 px-2 rounded-lg hover:bg-white/10 transition-all duration-300 text-xs min-h-[32px] group"
                           onClick={handleNavigation('/profile')}
                         >
-                          <User className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-400 transition-colors" />
+                          <User className="w-3 h-3 mr-2 text-gray-400 group-hover:text-blue-400 transition-colors" />
                           View Profile
                         </a>
                         {isAdmin && (
@@ -399,9 +451,9 @@ const Navigation = () => {
                             href="https://breakfree-blog-admin-no1o.bolt.host/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center text-gray-200 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all duration-300 text-base min-h-[48px] group"
+                            className="flex items-center text-gray-200 hover:text-white font-medium py-1.5 px-2 rounded-lg hover:bg-white/10 transition-all duration-300 text-xs min-h-[32px] group"
                           >
-                            <div className="w-5 h-5 mr-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded text-white flex items-center justify-center text-xs font-bold group-hover:scale-110 transition-transform">A</div>
+                            <div className="w-3 h-3 mr-2 bg-gradient-to-br from-purple-500 to-blue-500 rounded text-white flex items-center justify-center text-xs font-bold group-hover:scale-110 transition-transform">A</div>
                             Admin Dashboard
                           </a>
                         )}
@@ -409,18 +461,18 @@ const Navigation = () => {
                     </div>
                     <button
                       onClick={handleSignOut}
-                      className="w-full bg-gradient-to-r from-red-600/20 to-red-500/20 hover:from-red-600/30 hover:to-red-500/30 border border-red-500/30 hover:border-red-400/50 text-white px-6 py-4 rounded-xl font-bold text-center min-h-[56px] flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 group"
+                      className="w-full bg-gradient-to-r from-red-600/20 to-red-500/20 hover:from-red-600/30 hover:to-red-500/30 border border-red-500/30 hover:border-red-400/50 text-white px-3 py-2 rounded-lg font-medium text-center min-h-[40px] flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 group"
                     >
-                      <span className="group-hover:scale-105 transition-transform">Sign Out</span>
+                      <span className="group-hover:scale-105 transition-transform text-xs">Sign Out</span>
                     </button>
                   </div>
                 ) : (
                   <a
                     href="/auth"
-                    className="block w-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 hover:from-blue-600/30 hover:to-purple-600/30 border border-blue-500/30 hover:border-blue-400/50 text-white px-6 py-4 rounded-xl font-bold text-center min-h-[56px] flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group"
+                    className="block w-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 hover:from-blue-600/30 hover:to-purple-600/30 border border-blue-500/30 hover:border-blue-400/50 text-white px-3 py-2 rounded-lg font-medium text-center min-h-[40px] flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group"
                     onClick={handleNavigation('/auth')}
                   >
-                    <span className="group-hover:scale-105 transition-transform">Sign In</span>
+                    <span className="group-hover:scale-105 transition-transform text-xs">Sign In</span>
                   </a>
                 )}
                 </div>
