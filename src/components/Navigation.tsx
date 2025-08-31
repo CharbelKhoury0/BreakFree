@@ -25,6 +25,7 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -45,34 +46,93 @@ const Navigation = () => {
     setActiveDropdown(null);
   }, [location]);
 
-  // Scroll lock effect for mobile menu
+  // Enhanced scroll lock effect for mobile menu
   useEffect(() => {
     if (isOpen) {
-      // Prevent scrolling on body when menu is open
+      // Store current scroll position
+      const currentScrollY = window.scrollY;
+      setScrollPosition(currentScrollY);
+      
+      // Apply comprehensive scroll prevention
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${currentScrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+      
+      // Additional mobile-specific fixes
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.position = 'fixed';
+      document.documentElement.style.width = '100%';
+      document.documentElement.style.height = '100%';
+      
+      // Prevent touch scrolling and momentum scrolling
+      const preventScroll = (e: TouchEvent) => {
+        // Allow scrolling within the menu container
+        const target = e.target as Element;
+        const menuContainer = target.closest('[data-mobile-menu]');
+        
+        if (!menuContainer) {
+          e.preventDefault();
+        }
+      };
+      
+      const preventWheel = (e: WheelEvent) => {
+        e.preventDefault();
+      };
+      
+      // Add event listeners with passive: false to ensure preventDefault works
+      document.addEventListener('touchmove', preventScroll, { passive: false });
+      document.addEventListener('wheel', preventWheel, { passive: false });
+      document.addEventListener('scroll', preventScroll, { passive: false });
+      
+      // Store cleanup function
+      const cleanup = () => {
+        document.removeEventListener('touchmove', preventScroll);
+        document.removeEventListener('wheel', preventWheel);
+        document.removeEventListener('scroll', preventScroll);
+      };
+      
+      // Return cleanup function
+      return cleanup;
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.top = `-${window.scrollY}px`;
       document.body.style.width = '100%';
     } else {
-      // Restore scrolling when menu is closed
-      const scrollY = document.body.style.top;
+      // Restore scrolling and position when menu is closed
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
+      document.body.style.height = '';
+      
+      // Restore document element styles
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.position = '';
+      document.documentElement.style.width = '';
+      document.documentElement.style.height = '';
+      
+      // Restore scroll position
+      window.scrollTo(0, scrollPosition);
     }
-
-    // Cleanup on unmount
+  }, [isOpen, scrollPosition]);
+  
+  // Cleanup on component unmount
+  useEffect(() => {
     return () => {
+      // Ensure styles are cleaned up if component unmounts while menu is open
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.position = '';
+      document.documentElement.style.width = '';
+      document.documentElement.style.height = '';
     };
-  }, [isOpen]);
+  }, []);
 
   // Enhanced navigation handler with loading state and scroll to top
   const handleNavigation = (path: string, onClick?: () => void) => {
@@ -335,7 +395,19 @@ const Navigation = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="md:hidden fixed inset-0 z-50 bg-gradient-to-br from-slate-950/98 via-slate-900/96 to-slate-950/98 backdrop-blur-xl shadow-2xl overflow-hidden"
+            className="md:hidden fixed inset-0 z-50 bg-gradient-to-br from-slate-950/98 via-slate-900/96 to-slate-950/98 backdrop-blur-xl shadow-2xl"
+            data-mobile-menu
+            style={{
+              // Ensure menu covers entire viewport and prevents any scrolling
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              width: '100vw',
+              height: '100vh',
+              overflow: 'hidden'
+            }}
           >
             {/* Close button */}
             <div className="absolute top-3 right-3 z-10">
@@ -347,13 +419,27 @@ const Navigation = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="max-h-screen overflow-hidden relative flex flex-col">
+            
+            {/* Scrollable content container with proper touch handling */}
+            <div 
+              className="h-full overflow-y-auto overflow-x-hidden relative flex flex-col"
+              style={{
+                // Enable smooth scrolling within menu
+                WebkitOverflowScrolling: 'touch',
+                // Prevent overscroll behavior
+                overscrollBehavior: 'contain',
+                // Ensure proper height
+                height: '100vh',
+                maxHeight: '100vh'
+              }}
+            >
               {/* Subtle background pattern */}
               <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10"></div>
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]"></div>
               </div>
-              <div className="relative px-4 pt-16 pb-4 space-y-3 flex-1 flex flex-col justify-between">
+              
+              <div className="relative px-4 pt-16 pb-8 flex-1 flex flex-col justify-between min-h-full">
               <div className="flex-shrink-0">
                 {[...menuItems, ...authMenuItems].map((item, index) => (
                   <div key={index}>
@@ -407,7 +493,7 @@ const Navigation = () => {
                   </div>
                 ))}
               </div>
-              <div className="flex-shrink-0 mt-auto">
+              <div className="flex-shrink-0 mt-auto pt-4">
                 <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4"></div>
                 {user ? (
                   <div className="space-y-3">
